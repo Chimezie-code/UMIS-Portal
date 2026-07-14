@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Courses — UMIS Portal</title>
+  <link rel="stylesheet" href="page1.css" />
+  <style>
+    .filter-bar { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:24px; }
+    .filter-btn { padding:7px 18px; border-radius:20px; font-size:13px; font-weight:600; border:1.5px solid var(--gray-200); background:#fff; color:var(--gray-500); cursor:pointer; transition:var(--transition); }
+    .filter-btn.active, .filter-btn:hover { border-color:var(--navy); background:var(--navy); color:#fff; }
+
+    .courses-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:22px; }
+    .course-card { background:#fff; border-radius:var(--radius); border:1px solid var(--gray-200); box-shadow:var(--shadow-sm); overflow:hidden; transition:var(--transition); display:flex; flex-direction:column; }
+    .course-card:hover { box-shadow:var(--shadow); transform:translateY(-3px); }
+    .course-banner { height:8px; }
+    .course-body { padding:20px; flex:1; }
+    .course-code-tag { display:inline-block; background:var(--gold-pale); color:var(--gold); font-size:11px; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:3px 9px; border-radius:20px; margin-bottom:8px; }
+    .course-title { font-family:var(--font-display); font-size:17px; font-weight:600; color:var(--navy); line-height:1.3; margin-bottom:4px; }
+    .course-meta { font-size:12px; color:var(--gray-500); display:flex; gap:14px; margin-top:10px; flex-wrap:wrap; }
+    .course-meta span { display:flex; align-items:center; gap:4px; }
+    .course-footer { padding:14px 20px; border-top:1px solid var(--gray-100); background:var(--gray-50); }
+    .progress-label { display:flex; justify-content:space-between; font-size:12px; color:var(--gray-500); margin-bottom:6px; }
+    .progress-track { height:6px; background:var(--gray-200); border-radius:4px; overflow:hidden; }
+    .progress-fill { height:100%; border-radius:4px; background:linear-gradient(90deg,var(--navy),var(--gold)); transition:width .6s ease; }
+    .course-actions { padding:12px 20px; display:flex; gap:8px; border-top:1px solid var(--gray-100); }
+
+    .detail-modal-bg { display:none; position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:100; align-items:center; justify-content:center; }
+    .detail-modal-bg.open { display:flex; }
+    .detail-modal { background:#fff; border-radius:16px; width:560px; max-width:95vw; max-height:90vh; overflow-y:auto; padding:28px; position:relative; }
+    .modal-close { position:absolute; top:16px; right:16px; background:var(--gray-100); border:none; width:32px; height:32px; border-radius:50%; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+    .info-row { display:flex; gap:8px; padding:10px 0; border-bottom:1px solid var(--gray-100); font-size:14px; }
+    .info-row:last-child { border-bottom:none; }
+    .info-row .lbl { font-weight:600; color:var(--gray-500); width:140px; flex-shrink:0; }
+
+    .stats-row { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:28px; }
+  </style>
+</head>
+<body>
+<div class="layout">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-brand"><div class="brand-text">UMIS <span>Portal</span></div><div class="brand-sub">Student Dashboard</div></div>
+    <div class="sidebar-user">
+      <div class="user-avatar">JO</div>
+      <div><div class="user-name">James Okafor</div><div class="user-role">CSC/400/2023 · Comp. Science</div></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">Main Menu</div>
+      <a href="Academic_page.html"><span class="icon">🏠</span> Dashboard</a>
+      <a href="courses.html" class="active"><span class="icon">📚</span> My Courses</a>
+      <a href="results.html"><span class="icon">📊</span> My Results</a>
+      <a href="timetable.html"><span class="icon">📅</span> Timetable</a>
+      <a href="registration.html"><span class="icon">📝</span> Registration</a>
+      <div class="nav-section-title">Finance</div>
+      <a href="payment.html"><span class="icon">💳</span> Pay Fees</a>
+      <a href="payment_history.html"><span class="icon">🧾</span> Payment History</a>
+      <div class="nav-section-title">Resources</div>
+      <a href="library.html"><span class="icon">🏛️</span> E-Library</a>
+      <a href="help.html"><span class="icon">🆘</span> Support</a>
+      <div class="nav-section-title">Account</div>
+      <a href="#"><span class="icon">👤</span> My Profile</a>
+      <a href="home.html"><span class="icon">🚪</span> Logout</a>
+    </nav>
+    <div class="sidebar-footer">© 2026 UMIS Portal</div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main-content">
+    <div class="main-topbar">
+      <div class="topbar-title">My Courses</div>
+      <div class="topbar-right">
+        <button class="notification-btn">🔔</button>
+        <div class="badge badge-navy">Semester 2 · 2025/26</div>
+        <div class="user-avatar" style="width:34px;height:34px;font-size:13px;">JO</div>
+      </div>
+    </div>
+
+    <div class="content-area">
+      <!-- SUMMARY STATS -->
+      <div class="stats-row">
+        <div class="stat-card fade-in-1"><div class="stat-icon gold">📚</div><div><div class="stat-value">6</div><div class="stat-label">Total Courses</div></div></div>
+        <div class="stat-card fade-in-2"><div class="stat-icon green">✅</div><div><div class="stat-value">18</div><div class="stat-label">Credit Units</div></div></div>
+        <div class="stat-card fade-in-3"><div class="stat-icon navy">📈</div><div><div class="stat-value">72%</div><div class="stat-label">Avg. Progress</div></div></div>
+        <div class="stat-card fade-in-4"><div class="stat-icon blue">⏳</div><div><div class="stat-value">4</div><div class="stat-label">Compulsory</div></div></div>
+      </div>
+
+      <!-- FILTER + SEARCH -->
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
+        <div class="filter-bar" style="margin-bottom:0;">
+          <button class="filter-btn active" onclick="filterCourses('all',this)">All Courses</button>
+          <button class="filter-btn" onclick="filterCourses('compulsory',this)">Compulsory</button>
+          <button class="filter-btn" onclick="filterCourses('elective',this)">Elective</button>
+        </div>
+        <input type="search" id="searchBox" placeholder="🔍  Search courses…" style="max-width:260px;" oninput="searchCourses(this.value)" />
+      </div>
+
+      <!-- COURSES GRID -->
+      <div class="courses-grid" id="coursesGrid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- DETAIL MODAL -->
+<div class="detail-modal-bg" id="modalBg" onclick="if(event.target===this)closeModal()">
+  <div class="detail-modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<script>
+const COLORS = ['#0D1B3E','#C9932A','#16A34A','#1D4ED8','#7C3AED','#DB2777'];
+const courses = [
+  { code:'CSC 401', title:'Artificial Intelligence', lecturer:'Dr. Adewale Bello', units:3, type:'Compulsory', progress:68,
+    schedule:'Mon/Wed 08:00–09:30', venue:'Hall B, Room 12', description:'Fundamentals of AI including search algorithms, machine learning, neural networks, and intelligent agents.',
+    outline:['Introduction to AI & History','Search & Heuristics','Knowledge Representation','Machine Learning Basics','Neural Networks & Deep Learning','Natural Language Processing','AI Ethics'] },
+  { code:'CSC 403', title:'Database Systems', lecturer:'Prof. Ngozi Eze', units:3, type:'Compulsory', progress:82,
+    schedule:'Tue/Thu 10:00–11:30', venue:'Lab 3, ICT Block', description:'Relational and non-relational database design, SQL, normalization, transactions and concurrency control.',
+    outline:['ER Modelling','Relational Algebra','SQL Fundamentals','Normalization','Transaction Management','NoSQL Databases','Database Security'] },
+  { code:'CSC 405', title:'Computer Networks', lecturer:'Dr. Samuel Okeke', units:3, type:'Compulsory', progress:55,
+    schedule:'Mon/Fri 12:00–13:30', venue:'Lecture Hall C', description:'TCP/IP networking, protocol stack, LAN/WAN design, routing algorithms and network security.',
+    outline:['OSI & TCP/IP Models','Physical Layer','Data Link Layer','Network Layer & Routing','Transport Layer','Application Layer Protocols','Network Security'] },
+  { code:'CSC 407', title:'Software Engineering', lecturer:'Prof. Ibrahim Lawal', units:3, type:'Compulsory', progress:90,
+    schedule:'Wed/Fri 14:00–15:30', venue:'Lecture Hall A', description:'Software development lifecycle, agile methodologies, design patterns, testing and project management.',
+    outline:['SDLC Models','Requirements Engineering','System Design & Architecture','Design Patterns','Software Testing','Agile & Scrum','Software Quality Assurance'] },
+  { code:'CSC 409', title:'Information Security', lecturer:'Dr. Chioma Nwachukwu', units:2, type:'Elective', progress:60,
+    schedule:'Thursday 09:00–11:00', venue:'Room 20, Main Block', description:'Cryptography, network security, ethical hacking, intrusion detection and cybersecurity policy.',
+    outline:['Security Fundamentals','Symmetric Cryptography','Asymmetric Cryptography','Network Security Protocols','Web Application Security','Ethical Hacking','Cybersecurity Policy'] },
+  { code:'GST 401', title:'Entrepreneurship Studies', lecturer:'Dr. Fatima Aliyu', units:2, type:'Elective', progress:75,
+    schedule:'Friday 11:00–13:00', venue:'Business School Annex', description:'Principles of entrepreneurship, business model canvas, innovation, startup funding and growth strategies.',
+    outline:['Entrepreneurship Mindset','Business Model Canvas','Market Research','Financial Planning','Startup Funding','Pitching & Communication','Legal Aspects of Business'] },
+];
+
+let activeFilter = 'all';
+
+function renderCourses(list) {
+  const grid = document.getElementById('coursesGrid');
+  if(!list.length){ grid.innerHTML='<p style="color:var(--gray-400);font-size:14px;">No courses found.</p>'; return; }
+  grid.innerHTML = list.map((c,i)=> `
+    <div class="course-card fade-in-${(i%4)+1}" data-type="${c.type.toLowerCase()}">
+      <div class="course-banner" style="background:${COLORS[i%COLORS.length]}"></div>
+      <div class="course-body">
+        <div class="course-code-tag">${c.code}</div>
+        <div class="course-title">${c.title}</div>
+        <div style="font-size:13px;color:var(--gray-500);margin-top:4px;">👨‍🏫 ${c.lecturer}</div>
+        <div class="course-meta">
+          <span>📦 ${c.units} Units</span>
+          <span class="badge ${c.type==='Compulsory'?'badge-navy':'badge-gold'}" style="font-size:10px;">${c.type}</span>
+          <span>📍 ${c.venue}</span>
+        </div>
+      </div>
+      <div class="course-footer">
+        <div class="progress-label"><span>Course Progress</span><span style="font-weight:700;color:var(--navy);">${c.progress}%</span></div>
+        <div class="progress-track"><div class="progress-fill" style="width:${c.progress}%"></div></div>
+      </div>
+      <div class="course-actions">
+        <button class="btn btn-primary btn-sm" onclick="openModal(${i})">📖 View Details</button>
+        <button class="btn btn-outline btn-sm">📥 Materials</button>
+      </div>
+    </div>`).join('');
+}
+
+function filterCourses(type, btn) {
+  activeFilter = type;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  applyFilters();
+}
+function searchCourses(q) { applyFilters(q); }
+function applyFilters(q='') {
+  const qVal = (q || document.getElementById('searchBox').value).toLowerCase();
+  let list = courses.filter(c => activeFilter==='all' || c.type.toLowerCase()===activeFilter);
+  if(qVal) list = list.filter(c => c.title.toLowerCase().includes(qVal)||c.code.toLowerCase().includes(qVal)||c.lecturer.toLowerCase().includes(qVal));
+  renderCourses(list);
+}
+
+function openModal(i) {
+  const c = courses[i];
+  document.getElementById('modalContent').innerHTML = `
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+      <div style="width:50px;height:50px;border-radius:12px;background:${COLORS[i%COLORS.length]};display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;">${c.code.split(' ')[1]}</div>
+      <div>
+        <div style="font-family:var(--font-display);font-size:20px;font-weight:600;color:var(--navy);">${c.title}</div>
+        <div style="font-size:13px;color:var(--gray-500);">${c.code} · ${c.type}</div>
+      </div>
+    </div>
+    <p style="font-size:14px;color:var(--gray-700);line-height:1.7;margin-bottom:20px;">${c.description}</p>
+    <div style="margin-bottom:20px;">
+      <div class="info-row"><span class="lbl">Lecturer</span><span>${c.lecturer}</span></div>
+      <div class="info-row"><span class="lbl">Schedule</span><span>${c.schedule}</span></div>
+      <div class="info-row"><span class="lbl">Venue</span><span>${c.venue}</span></div>
+      <div class="info-row"><span class="lbl">Credit Units</span><span>${c.units}</span></div>
+      <div class="info-row"><span class="lbl">Type</span><span>${c.type}</span></div>
+    </div>
+    <div style="margin-bottom:16px;">
+      <div style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:4px;">Progress — ${c.progress}%</div>
+      <div class="progress-track"><div class="progress-fill" style="width:${c.progress}%"></div></div>
+    </div>
+    <div>
+      <div style="font-family:var(--font-display);font-size:16px;font-weight:600;color:var(--navy);margin-bottom:10px;">Course Outline</div>
+      ${c.outline.map((o,n)=>`<div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--gray-100);font-size:14px;"><span style="color:var(--gold);font-weight:700;min-width:22px;">${n+1}.</span><span>${o}</span></div>`).join('')}
+    </div>`;
+  document.getElementById('modalBg').classList.add('open');
+}
+function closeModal() { document.getElementById('modalBg').classList.remove('open'); }
+
+renderCourses(courses);
+</script>
+</body>
+</html>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payment History — UMIS Portal</title>
+  <link rel="stylesheet" href="page1.css" />
+  <style>
+    .pay-summary { display:grid; grid-template-columns:repeat(4,1fr); gap:18px; margin-bottom:28px; }
+    .pay-hero { background:linear-gradient(135deg,var(--navy),#1A2F5E); border-radius:var(--radius); padding:24px; color:#fff; position:relative; overflow:hidden; }
+    .pay-hero::before { content:'₦'; position:absolute; right:-10px; top:-20px; font-size:130px; font-weight:900; color:rgba(255,255,255,.04); font-family:var(--font-display); }
+    .pay-hero .amt { font-family:var(--font-display); font-size:36px; font-weight:700; color:var(--gold); margin:6px 0; }
+
+    .filter-row { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:20px; }
+    .filter-row input, .filter-row select { flex:1; min-width:140px; max-width:220px; }
+
+    .status-pill { display:inline-flex; align-items:center; gap:4px; padding:4px 10px; border-radius:20px; font-size:11px; font-weight:700; }
+    .status-success { background:var(--success-bg); color:var(--success); }
+    .status-pending  { background:var(--warning-bg); color:var(--warning); }
+    .status-failed   { background:var(--danger-bg);  color:var(--danger); }
+    .status-refunded { background:var(--info-bg);    color:var(--info); }
+
+    .receipt-modal-bg { display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:100; align-items:center; justify-content:center; }
+    .receipt-modal-bg.open { display:flex; }
+    .receipt-modal { background:#fff; border-radius:16px; width:440px; max-width:95vw; padding:0; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,.2); }
+    .receipt-top { background:var(--navy); padding:24px 28px; color:#fff; position:relative; }
+    .receipt-top::after { content:''; position:absolute; bottom:-1px; left:0; right:0; height:20px; background:#fff; border-radius:50% 50% 0 0; }
+    .receipt-body { padding:24px 28px; }
+    .receipt-row { display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px dashed var(--gray-100); font-size:14px; }
+    .receipt-row:last-child { border-bottom:none; }
+    .receipt-row .lbl { color:var(--gray-500); }
+    .receipt-row .val { font-weight:600; color:var(--navy); }
+    .receipt-total { display:flex; justify-content:space-between; padding:14px 16px; background:var(--gold-pale); border-radius:8px; margin-top:12px; font-weight:700; font-size:16px; color:var(--navy); }
+    .modal-close { background:rgba(255,255,255,.15); border:none; color:#fff; width:30px; height:30px; border-radius:50%; cursor:pointer; position:absolute; top:16px; right:16px; display:flex; align-items:center; justify-content:center; font-size:16px; }
+
+    .timeline-dot-col { text-align:center; padding-top:14px; }
+    .t-dot { width:10px; height:10px; border-radius:50%; background:var(--gold); display:inline-block; }
+    .t-dot.failed { background:var(--danger); }
+    .t-dot.pending { background:var(--warning); }
+
+    .chart-bar-wrap { display:flex; flex-direction:column; gap:8px; }
+    .chart-row { display:flex; align-items:center; gap:10px; font-size:13px; }
+    .chart-lbl { width:90px; color:var(--gray-500); font-size:12px; flex-shrink:0; }
+    .chart-track { flex:1; height:10px; background:var(--gray-100); border-radius:6px; overflow:hidden; }
+    .chart-fill  { height:100%; border-radius:6px; background:linear-gradient(90deg,var(--navy),var(--gold)); }
+    .chart-val { width:80px; text-align:right; font-weight:700; color:var(--navy); font-size:12px; flex-shrink:0; }
+
+    @media print { .sidebar,.main-topbar,.filter-row,.receipt-modal-bg { display:none!important; } .main-content { margin:0; } }
+  </style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-brand"><div class="brand-text">UMIS <span>Portal</span></div><div class="brand-sub">Student Dashboard</div></div>
+    <div class="sidebar-user"><div class="user-avatar">JO</div><div><div class="user-name">James Okafor</div><div class="user-role">CSC/400/2023 · Comp. Science</div></div></div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">Main Menu</div>
+      <a href="Academic_page.html"><span class="icon">🏠</span> Dashboard</a>
+      <a href="courses.html"><span class="icon">📚</span> My Courses</a>
+      <a href="results.html"><span class="icon">📊</span> My Results</a>
+      <a href="timetable.html"><span class="icon">📅</span> Timetable</a>
+      <a href="registration.html"><span class="icon">📝</span> Registration</a>
+      <div class="nav-section-title">Finance</div>
+      <a href="payment.html"><span class="icon">💳</span> Pay Fees</a>
+      <a href="payment_history.html" class="active"><span class="icon">🧾</span> Payment History</a>
+      <div class="nav-section-title">Resources</div>
+      <a href="library.html"><span class="icon">🏛️</span> E-Library</a>
+      <a href="help.html"><span class="icon">🆘</span> Support</a>
+      <div class="nav-section-title">Account</div>
+      <a href="#"><span class="icon">👤</span> My Profile</a>
+      <a href="home.html"><span class="icon">🚪</span> Logout</a>
+    </nav>
+    <div class="sidebar-footer">© 2026 UMIS Portal</div>
+  </aside>
+
+  <div class="main-content">
+    <div class="main-topbar">
+      <div class="topbar-title">Payment History</div>
+      <div class="topbar-right">
+        <button class="notification-btn">🔔</button>
+        <button class="btn btn-outline btn-sm" onclick="window.print()">🖨 Print</button>
+        <div class="user-avatar" style="width:34px;height:34px;font-size:13px;">JO</div>
+      </div>
+    </div>
+
+    <div class="content-area">
+      <!-- SUMMARY -->
+      <div class="pay-summary fade-in-1">
+        <div class="pay-hero" style="grid-column:span 2;">
+          <div style="font-size:12px;color:rgba(255,255,255,.5);letter-spacing:.5px;">TOTAL PAID (ALL TIME)</div>
+          <div class="amt" id="totalAmt"></div>
+          <div style="font-size:12px;color:rgba(255,255,255,.5);">Across all sessions</div>
+        </div>
+        <div class="stat-card"><div class="stat-icon green">✅</div><div><div class="stat-value" id="successCount">0</div><div class="stat-label">Successful</div></div></div>
+        <div class="stat-card"><div class="stat-icon gold">⏳</div><div><div class="stat-value" id="pendingCount">0</div><div class="stat-label">Pending</div></div></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 280px;gap:24px;">
+        <!-- TABLE -->
+        <div>
+          <div class="filter-row">
+            <input type="search" id="paySearch" placeholder="🔍 Search reference or type…" oninput="renderTable()" />
+            <select id="statusFilter" onchange="renderTable()">
+              <option value="all">All Status</option>
+              <option value="Success">Success</option>
+              <option value="Pending">Pending</option>
+              <option value="Failed">Failed</option>
+            </select>
+            <select id="sessionFilter" onchange="renderTable()">
+              <option value="all">All Sessions</option>
+              <option value="2025/26">2025/26</option>
+              <option value="2024/25">2024/25</option>
+              <option value="2023/24">2023/24</option>
+              <option value="2022/23">2022/23</option>
+            </select>
+          </div>
+          <div class="card" style="padding:0;overflow:hidden;">
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th></th><th>Date</th><th>Description</th><th>Reference</th><th>Session</th><th>Amount</th><th>Status</th><th>Action</th></tr></thead>
+                <tbody id="payTable"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- SIDEBAR CHART -->
+        <div>
+          <div class="card">
+            <div class="card-header"><div class="card-title" style="font-size:16px;">Payments by Session</div></div>
+            <div class="chart-bar-wrap" id="sessionChart"></div>
+          </div>
+          <div class="card" style="margin-top:20px;">
+            <div class="card-header"><div class="card-title" style="font-size:16px;">By Category</div></div>
+            <div id="catChart"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RECEIPT MODAL -->
+<div class="receipt-modal-bg" id="receiptBg" onclick="if(event.target===this)closeReceipt()">
+  <div class="receipt-modal">
+    <div class="receipt-top">
+      <button class="modal-close" onclick="closeReceipt()">✕</button>
+      <div style="font-size:12px;color:rgba(255,255,255,.5);letter-spacing:.5px;">PAYMENT RECEIPT</div>
+      <div style="font-family:var(--font-display);font-size:20px;font-weight:700;color:#fff;margin:6px 0;">UMIS Portal</div>
+      <div style="font-size:12px;color:rgba(255,255,255,.45);">University Management Information System</div>
+    </div>
+    <div class="receipt-body" id="receiptBody"></div>
+    <div style="padding:0 28px 20px;display:flex;gap:10px;">
+      <button class="btn btn-primary btn-sm" style="flex:1;justify-content:center;" onclick="window.print()">🖨 Print</button>
+      <button class="btn btn-outline btn-sm" style="flex:1;justify-content:center;" onclick="closeReceipt()">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const payments = [
+  {id:'PAY-001',date:'Jan 15, 2026',desc:'School Fees — Sem 2',ref:'TXN2026011501',session:'2025/26',amount:185000,status:'Success',method:'Remita',category:'Tuition'},
+  {id:'PAY-002',date:'Jan 10, 2026',desc:'Accommodation — Hostel A',ref:'TXN2026011001',session:'2025/26',amount:45000,status:'Success',method:'Bank Transfer',category:'Accommodation'},
+  {id:'PAY-003',date:'Dec 5, 2025',desc:'School Fees — Sem 1',ref:'TXN2025120501',session:'2025/26',amount:185000,status:'Success',method:'Remita',category:'Tuition'},
+  {id:'PAY-004',date:'Nov 20, 2025',desc:'Late Registration Fee',ref:'TXN2025112001',session:'2025/26',amount:5000,status:'Success',method:'Card',category:'Fees'},
+  {id:'PAY-005',date:'Apr 8, 2025',desc:'School Fees — Sem 2',ref:'TXN2025040801',session:'2024/25',amount:170000,status:'Success',method:'Remita',category:'Tuition'},
+  {id:'PAY-006',date:'Apr 2, 2025',desc:'Library Fine',ref:'TXN2025040201',session:'2024/25',amount:2500,status:'Success',method:'Card',category:'Fees'},
+  {id:'PAY-007',date:'Sep 3, 2024',desc:'School Fees — Sem 1',ref:'TXN2024090301',session:'2024/25',amount:170000,status:'Success',method:'Remita',category:'Tuition'},
+  {id:'PAY-008',date:'Sep 1, 2024',desc:'ID Card & Matriculation',ref:'TXN2024090101',session:'2024/25',amount:8000,status:'Pending',method:'Bank Transfer',category:'Fees'},
+  {id:'PAY-009',date:'Mar 12, 2024',desc:'School Fees — Sem 2',ref:'TXN2024031201',session:'2023/24',amount:155000,status:'Success',method:'Remita',category:'Tuition'},
+  {id:'PAY-010',date:'Sep 5, 2023',desc:'School Fees — Sem 1',ref:'TXN2023090501',session:'2023/24',amount:155000,status:'Success',method:'Remita',category:'Tuition'},
+  {id:'PAY-011',date:'Sep 3, 2023',desc:'Accommodation — Hostel B',ref:'TXN2023090301',session:'2023/24',amount:40000,status:'Failed',method:'Card',category:'Accommodation'},
+  {id:'PAY-012',date:'Mar 10, 2023',desc:'School Fees — Sem 2',ref:'TXN2023031001',session:'2022/23',amount:140000,status:'Success',method:'Remita',category:'Tuition'},
+];
+
+function fmt(n){ return '₦' + n.toLocaleString(); }
+function statusClass(s){ return {Success:'status-success',Pending:'status-pending',Failed:'status-failed',Refunded:'status-refunded'}[s]||''; }
+
+function renderStats(){
+  const succ = payments.filter(p=>p.status==='Success');
+  document.getElementById('totalAmt').textContent = fmt(succ.reduce((a,p)=>a+p.amount,0));
+  document.getElementById('successCount').textContent = succ.length;
+  document.getElementById('pendingCount').textContent = payments.filter(p=>p.status==='Pending').length;
+}
+
+function renderTable(){
+  const q = document.getElementById('paySearch').value.toLowerCase();
+  const sf = document.getElementById('statusFilter').value;
+  const sess = document.getElementById('sessionFilter').value;
+  let list = payments.filter(p=>
+    (sf==='all'||p.status===sf) &&
+    (sess==='all'||p.session===sess) &&
+    (!q || p.desc.toLowerCase().includes(q)||p.ref.toLowerCase().includes(q)||p.category.toLowerCase().includes(q))
+  );
+  document.getElementById('payTable').innerHTML = list.map((p,i)=>`
+    <tr>
+      <td class="timeline-dot-col"><div class="t-dot ${p.status==='Failed'?'failed':p.status==='Pending'?'pending':''}"></div></td>
+      <td style="font-size:13px;color:var(--gray-500);">${p.date}</td>
+      <td><div style="font-weight:600;font-size:14px;">${p.desc}</div><div style="font-size:12px;color:var(--gray-400);">${p.method}</div></td>
+      <td style="font-size:12px;font-family:monospace;color:var(--gray-500);">${p.ref}</td>
+      <td><span class="badge badge-navy">${p.session}</span></td>
+      <td style="font-weight:700;font-size:15px;color:var(--navy);">${fmt(p.amount)}</td>
+      <td><span class="status-pill ${statusClass(p.status)}">${p.status==='Success'?'✓':p.status==='Pending'?'⏳':'✕'} ${p.status}</span></td>
+      <td><button class="btn btn-outline btn-sm" onclick="openReceipt('${p.id}')">Receipt</button></td>
+    </tr>`).join('') || '<tr><td colspan="8" style="text-align:center;color:var(--gray-400);padding:24px;">No payments found.</td></tr>';
+}
+
+function renderCharts(){
+  const sessions = [...new Set(payments.map(p=>p.session))];
+  const maxSess = Math.max(...sessions.map(s=>payments.filter(p=>p.session===s&&p.status==='Success').reduce((a,p)=>a+p.amount,0)));
+  document.getElementById('sessionChart').innerHTML = sessions.map(s=>{
+    const total = payments.filter(p=>p.session===s&&p.status==='Success').reduce((a,p)=>a+p.amount,0);
+    return `<div class="chart-row"><div class="chart-lbl">${s}</div><div class="chart-track"><div class="chart-fill" style="width:${(total/maxSess*100).toFixed(0)}%"></div></div><div class="chart-val">${fmt(total)}</div></div>`;
+  }).join('');
+
+  const cats = [...new Set(payments.map(p=>p.category))];
+  const catColors = {Tuition:'var(--navy)',Accommodation:'var(--gold)',Fees:'var(--success)'};
+  const maxCat = Math.max(...cats.map(c=>payments.filter(p=>p.category===c&&p.status==='Success').reduce((a,p)=>a+p.amount,0)));
+  document.getElementById('catChart').innerHTML = cats.map(c=>{
+    const total = payments.filter(p=>p.category===c&&p.status==='Success').reduce((a,p)=>a+p.amount,0);
+    return `<div class="chart-row" style="margin-bottom:8px;"><div class="chart-lbl">${c}</div><div class="chart-track"><div class="chart-fill" style="width:${(total/maxCat*100).toFixed(0)}%;background:${catColors[c]||'var(--navy)'}"></div></div><div class="chart-val">${fmt(total)}</div></div>`;
+  }).join('');
+}
+
+function openReceipt(id){
+  const p = payments.find(x=>x.id===id);
+  document.getElementById('receiptBody').innerHTML = `
+    <div class="receipt-row"><div class="lbl">Receipt No.</div><div class="val">${p.id}</div></div>
+    <div class="receipt-row"><div class="lbl">Date</div><div class="val">${p.date}</div></div>
+    <div class="receipt-row"><div class="lbl">Student</div><div class="val">James Okafor</div></div>
+    <div class="receipt-row"><div class="lbl">Matric No.</div><div class="val">CSC/400/2023</div></div>
+    <div class="receipt-row"><div class="lbl">Description</div><div class="val">${p.desc}</div></div>
+    <div class="receipt-row"><div class="lbl">Reference</div><div class="val" style="font-family:monospace;font-size:12px;">${p.ref}</div></div>
+    <div class="receipt-row"><div class="lbl">Payment Method</div><div class="val">${p.method}</div></div>
+    <div class="receipt-row"><div class="lbl">Session</div><div class="val">${p.session}</div></div>
+    <div class="receipt-row"><div class="lbl">Status</div><div class="val"><span class="status-pill ${statusClass(p.status)}">${p.status}</span></div></div>
+    <div class="receipt-total"><span>Amount Paid</span><span style="color:var(--gold);">${fmt(p.amount)}</span></div>`;
+  document.getElementById('receiptBg').classList.add('open');
+}
+function closeReceipt(){ document.getElementById('receiptBg').classList.remove('open'); }
+
+renderStats(); renderTable(); renderCharts();
+</script>
+</body>
+</html>

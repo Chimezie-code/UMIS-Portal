@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Course Registration — UMIS Portal</title>
+  <link rel="stylesheet" href="page1.css" />
+  <style>
+    .reg-status-bar { background:linear-gradient(135deg,var(--navy),#1A2F5E); border-radius:var(--radius); padding:20px 24px; color:#fff; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px; margin-bottom:24px; }
+    .reg-status-bar .title { font-family:var(--font-display); font-size:18px; font-weight:600; }
+    .reg-status-bar .sub   { font-size:12px; color:rgba(255,255,255,.55); margin-top:2px; }
+    .unit-tracker { display:flex; align-items:center; gap:14px; }
+    .unit-ring { position:relative; width:60px; height:60px; }
+    .unit-ring svg { transform:rotate(-90deg); }
+    .unit-ring .val { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; color:#fff; flex-direction:column; line-height:1.1; }
+    .unit-ring .lbl { font-size:9px; color:rgba(255,255,255,.6); }
+
+    .two-col { display:grid; grid-template-columns:1fr 320px; gap:24px; }
+    .available-header { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:16px; }
+    .search-filter { display:flex; gap:10px; flex-wrap:wrap; }
+
+    .course-list-item { display:flex; align-items:center; gap:14px; padding:14px 18px; background:#fff; border-radius:var(--radius-sm); border:1.5px solid var(--gray-200); margin-bottom:10px; transition:var(--transition); cursor:pointer; }
+    .course-list-item:hover { border-color:var(--navy); box-shadow:var(--shadow-sm); }
+    .course-list-item.selected { border-color:var(--gold); background:var(--gold-pale); }
+    .course-list-item.registered { border-color:var(--success); background:var(--success-bg); opacity:.7; pointer-events:none; }
+    .cli-code { font-size:11px; font-weight:700; letter-spacing:.8px; color:var(--gold); background:var(--gold-pale); padding:3px 8px; border-radius:6px; white-space:nowrap; }
+    .cli-title { font-size:14px; font-weight:600; color:var(--navy); flex:1; }
+    .cli-meta  { font-size:12px; color:var(--gray-500); margin-top:2px; }
+    .cli-units { font-size:13px; font-weight:700; color:var(--navy); background:rgba(13,27,62,.08); padding:4px 10px; border-radius:6px; white-space:nowrap; }
+    .cli-check { width:22px; height:22px; border-radius:50%; border:2px solid var(--gray-300); flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:12px; transition:var(--transition); }
+    .course-list-item.selected .cli-check { background:var(--gold); border-color:var(--gold); color:#fff; }
+    .course-list-item.registered .cli-check { background:var(--success); border-color:var(--success); color:#fff; }
+
+    .cart-item { display:flex; align-items:center; gap:10px; padding:10px 14px; background:var(--gray-50); border-radius:var(--radius-sm); margin-bottom:8px; }
+    .cart-item .code { font-size:11px; font-weight:700; color:var(--gold); }
+    .cart-item .name { font-size:13px; font-weight:500; color:var(--navy); flex:1; }
+    .cart-item .units{ font-size:12px; font-weight:700; color:var(--gray-500); }
+    .cart-remove { background:var(--danger-bg); border:none; color:var(--danger); width:24px; height:24px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0; }
+
+    .unit-bar-wrap { margin:12px 0; }
+    .unit-bar-track { height:10px; background:var(--gray-200); border-radius:6px; overflow:hidden; margin-top:4px; }
+    .unit-bar-fill  { height:100%; border-radius:6px; background:linear-gradient(90deg,var(--navy),var(--gold)); transition:width .4s ease; }
+
+    .empty-cart { text-align:center; padding:30px 20px; color:var(--gray-400); font-size:13px; }
+    .empty-cart .icon { font-size:36px; display:block; margin-bottom:8px; }
+
+    .success-banner { display:none; background:var(--success-bg); border:1.5px solid var(--success); border-radius:var(--radius-sm); padding:14px 18px; color:var(--success); font-weight:600; font-size:14px; margin-bottom:16px; }
+    .success-banner.show { display:flex; align-items:center; gap:10px; }
+  </style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-brand"><div class="brand-text">UMIS <span>Portal</span></div><div class="brand-sub">Student Dashboard</div></div>
+    <div class="sidebar-user"><div class="user-avatar">JO</div><div><div class="user-name">James Okafor</div><div class="user-role">CSC/400/2023 · Comp. Science</div></div></div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">Main Menu</div>
+      <a href="Academic_page.html"><span class="icon">🏠</span> Dashboard</a>
+      <a href="courses.html"><span class="icon">📚</span> My Courses</a>
+      <a href="results.html"><span class="icon">📊</span> My Results</a>
+      <a href="timetable.html"><span class="icon">📅</span> Timetable</a>
+      <a href="registration.html" class="active"><span class="icon">📝</span> Registration</a>
+      <div class="nav-section-title">Finance</div>
+      <a href="payment.html"><span class="icon">💳</span> Pay Fees</a>
+      <a href="payment_history.html"><span class="icon">🧾</span> Payment History</a>
+      <div class="nav-section-title">Resources</div>
+      <a href="library.html"><span class="icon">🏛️</span> E-Library</a>
+      <a href="help.html"><span class="icon">🆘</span> Support</a>
+      <div class="nav-section-title">Account</div>
+      <a href="#"><span class="icon">👤</span> My Profile</a>
+      <a href="home.html"><span class="icon">🚪</span> Logout</a>
+    </nav>
+    <div class="sidebar-footer">© 2026 UMIS Portal</div>
+  </aside>
+
+  <div class="main-content">
+    <div class="main-topbar">
+      <div class="topbar-title">Course Registration</div>
+      <div class="topbar-right">
+        <button class="notification-btn">🔔</button>
+        <div class="badge badge-gold">Semester 2 · 2025/26</div>
+        <div class="user-avatar" style="width:34px;height:34px;font-size:13px;">JO</div>
+      </div>
+    </div>
+
+    <div class="content-area">
+      <!-- STATUS BAR -->
+      <div class="reg-status-bar fade-in-1">
+        <div>
+          <div class="title">400L — Semester 2 Registration</div>
+          <div class="sub">Registration closes: June 5, 2026 · Fees must be cleared before submitting</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:20px;">
+          <div class="unit-tracker">
+            <div class="unit-ring">
+              <svg width="60" height="60" viewBox="0 0 60 60">
+                <circle cx="30" cy="30" r="24" fill="none" stroke="rgba(255,255,255,.15)" stroke-width="6"/>
+                <circle id="ringCircle" cx="30" cy="30" r="24" fill="none" stroke="#C9932A" stroke-width="6"
+                  stroke-dasharray="150.8" stroke-dashoffset="150.8" stroke-linecap="round" style="transition:stroke-dashoffset .5s ease"/>
+              </svg>
+              <div class="val"><span id="cartUnits">0</span><span class="lbl">units</span></div>
+            </div>
+            <div><div style="font-size:13px;font-weight:600;color:rgba(255,255,255,.85);">Credit Units</div><div style="font-size:11px;color:rgba(255,255,255,.45);">Min: 15 · Max: 24</div></div>
+          </div>
+          <div class="badge badge-gold" id="feesBadge">✅ Fees Cleared</div>
+        </div>
+      </div>
+
+      <div class="success-banner" id="successBanner">✅ Your courses have been submitted successfully! Check your timetable for the schedule.</div>
+
+      <div class="two-col">
+        <!-- AVAILABLE COURSES -->
+        <div>
+          <div class="available-header">
+            <div style="font-family:var(--font-display);font-size:18px;font-weight:600;color:var(--navy);">Available Courses</div>
+            <div class="search-filter">
+              <input type="search" id="regSearch" placeholder="🔍 Search…" style="width:200px;" oninput="renderAvailable()" />
+              <select id="typeFilter" onchange="renderAvailable()">
+                <option value="all">All Types</option>
+                <option value="Compulsory">Compulsory</option>
+                <option value="Elective">Elective</option>
+              </select>
+            </div>
+          </div>
+          <div id="availList"></div>
+        </div>
+
+        <!-- CART -->
+        <div>
+          <div class="card" style="position:sticky;top:80px;">
+            <div class="card-header">
+              <div class="card-title" style="font-size:17px;">Registration Cart</div>
+              <span class="badge badge-navy" id="cartCount">0 courses</span>
+            </div>
+            <div id="cartItems"><div class="empty-cart"><span class="icon">🛒</span>No courses selected yet.<br>Click courses to add them.</div></div>
+            <div class="unit-bar-wrap" id="unitBarWrap" style="display:none;">
+              <div style="display:flex;justify-content:space-between;font-size:12px;"><span style="font-weight:600;color:var(--gray-700);">Unit Load</span><span id="unitLabel" style="font-weight:700;color:var(--navy);"></span></div>
+              <div class="unit-bar-track"><div class="unit-bar-fill" id="unitBarFill"></div></div>
+            </div>
+            <div id="cartActions" style="margin-top:14px;display:none;">
+              <button class="btn btn-gold" style="width:100%;justify-content:center;" onclick="submitReg()">📝 Submit Registration</button>
+              <button class="btn btn-outline btn-sm" style="width:100%;justify-content:center;margin-top:8px;" onclick="clearCart()">🗑 Clear All</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const available = [
+  {code:'CSC 401',title:'Artificial Intelligence',units:3,type:'Compulsory',lecturer:'Dr. A. Bello',semester:'400-2'},
+  {code:'CSC 403',title:'Database Systems',units:3,type:'Compulsory',lecturer:'Prof. N. Eze',semester:'400-2'},
+  {code:'CSC 405',title:'Computer Networks',units:3,type:'Compulsory',lecturer:'Dr. S. Okeke',semester:'400-2'},
+  {code:'CSC 407',title:'Software Engineering',units:3,type:'Compulsory',lecturer:'Prof. I. Lawal',semester:'400-2'},
+  {code:'CSC 409',title:'Information Security',units:2,type:'Elective',lecturer:'Dr. C. Nwachukwu',semester:'400-2'},
+  {code:'CSC 411',title:'Cloud Computing',units:2,type:'Elective',lecturer:'Mr. T. Obi',semester:'400-2'},
+  {code:'CSC 413',title:'Mobile App Development',units:2,type:'Elective',lecturer:'Dr. R. Adeyemi',semester:'400-2'},
+  {code:'GST 401',title:'Entrepreneurship Studies',units:2,type:'Elective',lecturer:'Dr. F. Aliyu',semester:'400-2'},
+  {code:'MTH 401',title:'Operations Research',units:2,type:'Elective',lecturer:'Prof. K. Usman',semester:'400-2'},
+];
+
+const ALREADY = ['CSC 401','CSC 403','CSC 405','CSC 407']; // pre-registered
+let cart = [];
+
+function isInCart(code){ return cart.includes(code); }
+function isRegistered(code){ return ALREADY.includes(code); }
+
+function toggleCourse(code){
+  if(isRegistered(code)) return;
+  const c = available.find(x=>x.code===code);
+  if(isInCart(code)){
+    cart = cart.filter(x=>x!==code);
+  } else {
+    const total = cartUnits() + c.units;
+    if(total > 24){ alert('Maximum credit load is 24 units.'); return; }
+    cart.push(code);
+  }
+  renderAvailable(); renderCart();
+}
+
+function cartUnits(){ return cart.reduce((a,code)=>{ const c=available.find(x=>x.code===code); return a+(c?c.units:0); },0); }
+
+function renderAvailable(){
+  const q = document.getElementById('regSearch').value.toLowerCase();
+  const tf = document.getElementById('typeFilter').value;
+  let list = available.filter(c=> (tf==='all'||c.type===tf) && (!q || c.title.toLowerCase().includes(q)||c.code.toLowerCase().includes(q)));
+  document.getElementById('availList').innerHTML = list.map(c=>{
+    const reg=isRegistered(c.code), sel=isInCart(c.code);
+    return `<div class="course-list-item${sel?' selected':''}${reg?' registered':''}" onclick="toggleCourse('${c.code}')">
+      <div class="cli-check">${reg?'✓':sel?'✓':''}</div>
+      <div class="cli-code">${c.code}</div>
+      <div style="flex:1;min-width:0;">
+        <div class="cli-title">${c.title}</div>
+        <div class="cli-meta">👨‍🏫 ${c.lecturer} · <span class="badge ${c.type==='Compulsory'?'badge-navy':'badge-gold'}" style="font-size:10px;">${c.type}</span>${reg?' · <span style="color:var(--success);font-weight:600;">Already Registered</span>':''}</div>
+      </div>
+      <div class="cli-units">${c.units} units</div>
+    </div>`;
+  }).join('');
+}
+
+function renderCart(){
+  const units = cartUnits();
+  document.getElementById('cartCount').textContent = cart.length + (cart.length===1?' course':' courses');
+  // ring
+  const pct = Math.min(units/24, 1);
+  const circ = 2*Math.PI*24;
+  document.getElementById('ringCircle').style.strokeDashoffset = circ*(1-pct);
+  document.getElementById('cartUnits').textContent = units;
+
+  if(!cart.length){
+    document.getElementById('cartItems').innerHTML='<div class="empty-cart"><span class="icon">🛒</span>No courses selected yet.<br>Click courses to add them.</div>';
+    document.getElementById('unitBarWrap').style.display='none';
+    document.getElementById('cartActions').style.display='none';
+    return;
+  }
+  document.getElementById('unitBarWrap').style.display='block';
+  document.getElementById('cartActions').style.display='block';
+  document.getElementById('unitLabel').textContent = units + '/24 units';
+  document.getElementById('unitBarFill').style.width = (units/24*100)+'%';
+  document.getElementById('unitBarFill').style.background = units<15?'var(--danger)':units>22?'var(--warning)':'';
+
+  document.getElementById('cartItems').innerHTML = cart.map(code=>{
+    const c=available.find(x=>x.code===code);
+    return `<div class="cart-item">
+      <div style="flex:1;min-width:0;"><div class="code">${c.code}</div><div class="name">${c.title}</div></div>
+      <div class="units">${c.units}u</div>
+      <button class="cart-remove" onclick="event.stopPropagation();toggleCourse('${c.code}')">✕</button>
+    </div>`;
+  }).join('')+`<div style="margin-top:12px;padding:10px 14px;background:${units<15?'var(--danger-bg)':'var(--success-bg)'};border-radius:8px;font-size:13px;font-weight:600;color:${units<15?'var(--danger)':'var(--success)'};">${units<15?`⚠ Need at least ${15-units} more unit(s)`:'✅ Meets minimum unit requirement'}</div>`;
+}
+
+function clearCart(){ cart=[]; renderAvailable(); renderCart(); }
+function submitReg(){
+  const units=cartUnits();
+  if(units<15){ alert('You must register at least 15 credit units.'); return; }
+  const banner=document.getElementById('successBanner');
+  banner.classList.add('show');
+  clearCart();
+  banner.scrollIntoView({behavior:'smooth'});
+}
+
+renderAvailable(); renderCart();
+</script>
+</body>
+</html>

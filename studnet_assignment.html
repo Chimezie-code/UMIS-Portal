@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Assignments — UMIS Student</title>
+  <link rel="stylesheet" href="page1.css" />
+  <style>
+    .asg-card {
+      border: 1.5px solid var(--gray-200); border-radius: var(--radius-md);
+      padding: 18px 20px; margin-bottom: 12px; background: white;
+      transition: var(--transition); position: relative; overflow: hidden;
+    }
+    .asg-card::before { content:''; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--navy); border-radius:4px 0 0 4px; }
+    .asg-card.urgent::before { background:var(--red); }
+    .asg-card.done::before { background:var(--green); }
+    .asg-card:hover { box-shadow:var(--shadow-sm); }
+    .asg-title { font-family:var(--font-display); font-size:16px; font-weight:700; color:var(--navy); }
+    .asg-meta { font-size:12px; color:var(--gray-500); margin:4px 0 10px; }
+    .asg-desc { font-size:13.5px; color:var(--gray-700); line-height:1.65; }
+  </style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-text">UMIS <span>Portal</span></div>
+      <div class="brand-sub">Student Portal</div>
+    </div>
+    <div class="sidebar-user">
+      <div class="user-avatar">CN</div>
+      <div><div class="user-name">Chioma Nwachukwu</div><div class="user-role">400L · Computer Science</div></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">Main</div>
+      <a href="student_page.html"><span class="icon">🏠</span> Dashboard</a>
+      <a href="student_page.html"><span class="icon">📚</span> My Courses</a>
+      <a href="student_timetable.html"><span class="icon">📅</span> My Timetable</a>
+      <a href="student_assignments.html" class="active"><span class="icon">📋</span> Assignments</a>
+      <div class="nav-section-title">Resources</div>
+      <a href="library.html"><span class="icon">🏛️</span> E-Library</a>
+      <div class="nav-section-title">Account</div>
+      <a href="#"><span class="icon">👤</span> My Profile</a>
+      <a href="home.html"><span class="icon">🚪</span> Logout</a>
+    </nav>
+    <div class="sidebar-footer">© 2026 UMIS Portal</div>
+  </aside>
+  <div class="main-content">
+    <div class="main-topbar">
+      <div class="topbar-title">My Assignments</div>
+      <div class="topbar-right">
+        <button class="notification-btn">🔔</button>
+        <span class="badge badge-gold">2025/2026 Sem 2</span>
+      </div>
+    </div>
+    <div class="content-area">
+      <div style="display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;">
+        <button class="filter-btn active" onclick="setFilter(this,'all')">All</button>
+        <button class="filter-btn" onclick="setFilter(this,'open')">Open</button>
+        <button class="filter-btn" onclick="setFilter(this,'closed')">Closed</button>
+      </div>
+      <div id="asgList"></div>
+    </div>
+  </div>
+</div>
+<script>
+const MATRIC = 'CSC/2022/040';
+let filter = 'all';
+function getAssignments(){ try{return JSON.parse(localStorage.getItem('assignments')||'[]');}catch{return[];} }
+function getEnrolled(){
+  const all=JSON.parse(localStorage.getItem('studentEnrollments')||'{}');
+  return Object.keys(all).filter(c=>(all[c]||[]).some(s=>s.matric===MATRIC));
+}
+function setFilter(btn,val){ filter=val; document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); render(); }
+function render(){
+  const enrolled=getEnrolled();
+  let list=getAssignments().filter(a=>enrolled.includes(a.course));
+  const today=new Date(); today.setHours(0,0,0,0);
+  if(filter==='open') list=list.filter(a=>new Date(a.dueDate)>=today);
+  if(filter==='closed') list=list.filter(a=>new Date(a.dueDate)<today);
+  const el=document.getElementById('asgList');
+  if(list.length===0){ el.innerHTML=`<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-title">No assignments</div><div class="empty-desc">Your lecturer hasn't posted any assignments yet, or you haven't registered for courses.</div></div>`; return; }
+  el.innerHTML=list.slice().reverse().map(a=>{
+    const due=new Date(a.dueDate); const diff=Math.ceil((due-today)/86400000);
+    const cls=diff<0?'closed':diff<=3?'urgent':'open';
+    const label=diff<0?'Closed':diff<=3?`Due in ${diff}d`:`Due ${due.toLocaleDateString('en-GB',{day:'2-digit',month:'short'})}`;
+    return `<div class="asg-card ${cls}">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+        <div class="asg-title">${a.title}</div>
+        <span class="badge ${cls==='open'?'badge-success':cls==='urgent'?'badge-red':'badge-gray'}">${label}</span>
+      </div>
+      <div class="asg-meta"><span class="badge badge-navy" style="margin-right:6px;">${a.course}</span>${a.marks?`${a.marks} marks · `:''}${a.subType} · Posted ${a.posted}</div>
+      <div class="asg-desc">${a.desc}</div>
+      ${a.fileName?`<div style="font-size:12px;color:var(--blue);margin-top:8px;">📎 ${a.fileName}</div>`:''}
+      ${diff>=0?`<div style="margin-top:12px;"><button class="btn btn-gold btn-sm">📤 Submit Assignment</button></div>`:'<div style="margin-top:10px;"><span class="badge badge-gray">Submission closed</span></div>'}
+    </div>`;
+  }).join('');
+}
+render();
+setInterval(render,8000);
+</script>
+</body>
+</html>

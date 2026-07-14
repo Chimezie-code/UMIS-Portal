@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>E-Library — UMIS Portal</title>
+  <link rel="stylesheet" href="page1.css" />
+  <style>
+    .lib-hero { background:linear-gradient(135deg,var(--navy),#1A2F5E 60%,#0A1628); border-radius:var(--radius); padding:30px 32px; color:#fff; margin-bottom:28px; position:relative; overflow:hidden; }
+    .lib-hero::before { content:'📚'; position:absolute; right:24px; bottom:-10px; font-size:100px; opacity:.12; }
+    .lib-hero h1 { font-family:var(--font-display); font-size:26px; font-weight:700; margin-bottom:6px; }
+    .lib-hero p  { font-size:13px; color:rgba(255,255,255,.55); max-width:500px; }
+    .lib-stats   { display:flex; gap:28px; margin-top:18px; }
+    .lib-stat    { text-align:center; }
+    .lib-stat .n { font-size:24px; font-weight:700; color:var(--gold); }
+    .lib-stat .l { font-size:11px; color:rgba(255,255,255,.45); margin-top:2px; }
+
+    .cat-tabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:22px; }
+    .cat-tab { padding:8px 16px; border-radius:20px; font-size:13px; font-weight:600; border:1.5px solid var(--gray-200); background:#fff; color:var(--gray-500); cursor:pointer; transition:var(--transition); display:flex; align-items:center; gap:6px; }
+    .cat-tab.active, .cat-tab:hover { border-color:var(--navy); background:var(--navy); color:#fff; }
+
+    .books-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:20px; }
+    .book-card { background:#fff; border-radius:var(--radius); border:1px solid var(--gray-200); box-shadow:var(--shadow-sm); overflow:hidden; transition:var(--transition); display:flex; flex-direction:column; }
+    .book-card:hover { box-shadow:var(--shadow); transform:translateY(-4px); }
+    .book-cover { height:140px; display:flex; align-items:center; justify-content:center; font-size:52px; position:relative; }
+    .book-cover .badge-new { position:absolute; top:10px; right:10px; background:var(--gold); color:#fff; font-size:10px; font-weight:700; padding:2px 7px; border-radius:10px; }
+    .book-cover .badge-pop { position:absolute; top:10px; right:10px; background:var(--danger); color:#fff; font-size:10px; font-weight:700; padding:2px 7px; border-radius:10px; }
+    .book-body { padding:14px 16px; flex:1; }
+    .book-title  { font-family:var(--font-display); font-size:14px; font-weight:600; color:var(--navy); line-height:1.35; margin-bottom:4px; }
+    .book-author { font-size:12px; color:var(--gray-500); }
+    .book-meta   { display:flex; align-items:center; justify-content:space-between; margin-top:10px; font-size:12px; }
+    .book-format { background:var(--gray-100); color:var(--gray-700); padding:2px 8px; border-radius:6px; font-weight:600; font-size:11px; }
+    .book-rating { color:var(--gold); font-weight:700; }
+    .book-footer { padding:10px 16px; border-top:1px solid var(--gray-100); display:flex; gap:8px; }
+    .book-footer .btn { flex:1; justify-content:center; font-size:12px; }
+
+    .preview-modal-bg { display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:100; align-items:center; justify-content:center; }
+    .preview-modal-bg.open { display:flex; }
+    .preview-modal { background:#fff; border-radius:16px; width:600px; max-width:95vw; max-height:90vh; overflow-y:auto; }
+    .preview-top { padding:24px 28px 20px; border-bottom:1px solid var(--gray-100); display:flex; gap:16px; align-items:flex-start; position:relative; }
+    .preview-icon { width:70px; height:90px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:36px; flex-shrink:0; }
+    .preview-body { padding:20px 28px; }
+    .modal-close { background:var(--gray-100); border:none; width:32px; height:32px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:16px; position:absolute; top:16px; right:16px; }
+    .dl-btn { display:flex; align-items:center; gap:10px; padding:12px 18px; background:var(--gray-50); border-radius:var(--radius-sm); border:1.5px solid var(--gray-200); cursor:pointer; transition:var(--transition); margin-bottom:10px; text-decoration:none; }
+    .dl-btn:hover { border-color:var(--navy); background:rgba(13,27,62,.04); }
+    .dl-btn .fmt { font-size:11px; font-weight:700; padding:3px 8px; border-radius:6px; }
+    .dl-btn .info { flex:1; font-size:13px; font-weight:600; color:var(--navy); }
+    .dl-btn .size { font-size:12px; color:var(--gray-400); }
+
+    .toast { position:fixed; bottom:28px; right:28px; background:var(--navy); color:#fff; padding:12px 20px; border-radius:10px; font-size:14px; font-weight:600; transform:translateY(80px); opacity:0; transition:all .3s ease; z-index:200; display:flex; align-items:center; gap:10px; }
+    .toast.show { transform:translateY(0); opacity:1; }
+  </style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-brand"><div class="brand-text">UMIS <span>Portal</span></div><div class="brand-sub">Student Dashboard</div></div>
+    <div class="sidebar-user"><div class="user-avatar">JO</div><div><div class="user-name">James Okafor</div><div class="user-role">CSC/400/2023 · Comp. Science</div></div></div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">Main Menu</div>
+      <a href="Academic_page.html"><span class="icon">🏠</span> Dashboard</a>
+      <a href="courses.html"><span class="icon">📚</span> My Courses</a>
+      <a href="results.html"><span class="icon">📊</span> My Results</a>
+      <a href="timetable.html"><span class="icon">📅</span> Timetable</a>
+      <a href="registration.html"><span class="icon">📝</span> Registration</a>
+      <div class="nav-section-title">Finance</div>
+      <a href="payment.html"><span class="icon">💳</span> Pay Fees</a>
+      <a href="payment_history.html"><span class="icon">🧾</span> Payment History</a>
+      <div class="nav-section-title">Resources</div>
+      <a href="library.html" class="active"><span class="icon">🏛️</span> E-Library</a>
+      <a href="help.html"><span class="icon">🆘</span> Support</a>
+      <div class="nav-section-title">Account</div>
+      <a href="#"><span class="icon">👤</span> My Profile</a>
+      <a href="home.html"><span class="icon">🚪</span> Logout</a>
+    </nav>
+    <div class="sidebar-footer">© 2026 UMIS Portal</div>
+  </aside>
+
+  <div class="main-content">
+    <div class="main-topbar">
+      <div class="topbar-title">E-Library</div>
+      <div class="topbar-right">
+        <button class="notification-btn">🔔</button>
+        <div class="badge badge-gold">Digital Resources</div>
+        <div class="user-avatar" style="width:34px;height:34px;font-size:13px;">JO</div>
+      </div>
+    </div>
+
+    <div class="content-area">
+      <!-- HERO -->
+      <div class="lib-hero fade-in-1">
+        <h1>UMIS Digital Library</h1>
+        <p>Access thousands of academic textbooks, journals, and lecture notes. Available 24/7 for all registered students.</p>
+        <div class="lib-stats">
+          <div class="lib-stat"><div class="n">2,400+</div><div class="l">Books</div></div>
+          <div class="lib-stat"><div class="n">180+</div><div class="l">Journals</div></div>
+          <div class="lib-stat"><div class="n">500+</div><div class="l">Lecture Notes</div></div>
+          <div class="lib-stat"><div class="n">24/7</div><div class="l">Access</div></div>
+        </div>
+      </div>
+
+      <!-- SEARCH + CATEGORIES -->
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px;">
+        <input type="search" id="libSearch" placeholder="🔍  Search books, authors, topics…" style="flex:1;min-width:220px;" oninput="renderBooks()" />
+        <select id="fmtFilter" onchange="renderBooks()">
+          <option value="all">All Formats</option>
+          <option value="PDF">PDF</option>
+          <option value="EPUB">EPUB</option>
+        </select>
+      </div>
+      <div class="cat-tabs" id="catTabs"></div>
+      <div class="books-grid" id="booksGrid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- PREVIEW MODAL -->
+<div class="preview-modal-bg" id="previewBg" onclick="if(event.target===this)closePreview()">
+  <div class="preview-modal">
+    <div class="preview-top" id="previewTop"></div>
+    <div class="preview-body" id="previewBody"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">✅ Download started!</div>
+
+<script>
+const CATS = ['All','Computer Science','Mathematics','Engineering','General Studies','Journals'];
+const BOOKS = [
+  {id:0,title:'Artificial Intelligence: A Modern Approach',author:'Russell & Norvig',cat:'Computer Science',emoji:'🤖',bg:'#EEF2FF',formats:['PDF','EPUB'],size:'18.2 MB',pages:1152,rating:'4.9',year:2022,badge:'pop'},
+  {id:1,title:'Database System Concepts',author:'Silberschatz, Korth & Sudarshan',cat:'Computer Science',emoji:'🗄️',bg:'#F0FDF4',formats:['PDF'],size:'12.5 MB',pages:1376,rating:'4.8',year:2023,badge:''},
+  {id:2,title:'Computer Networks: A Top-Down Approach',author:'Kurose & Ross',cat:'Computer Science',emoji:'🌐',bg:'#EFF6FF',formats:['PDF','EPUB'],size:'9.8 MB',pages:864,rating:'4.7',year:2022,badge:''},
+  {id:3,title:'Software Engineering',author:'Ian Sommerville',cat:'Computer Science',emoji:'💻',bg:'#FFF7ED',formats:['PDF'],size:'15.3 MB',pages:792,rating:'4.6',year:2023,badge:'new'},
+  {id:4,title:'Introduction to Algorithms',author:'Cormen, Leiserson, Rivest & Stein',cat:'Computer Science',emoji:'🔢',bg:'#FDF4FF',formats:['PDF','EPUB'],size:'21.1 MB',pages:1292,rating:'4.9',year:2022,badge:'pop'},
+  {id:5,title:'Computer Security: Principles and Practice',author:'Stallings & Brown',cat:'Computer Science',emoji:'🔐',bg:'#FFF1F2',formats:['PDF'],size:'11.7 MB',pages:752,rating:'4.5',year:2023,badge:'new'},
+  {id:6,title:'Discrete Mathematics and Its Applications',author:'Kenneth H. Rosen',cat:'Mathematics',emoji:'📐',bg:'#ECFDF5',formats:['PDF','EPUB'],size:'14.2 MB',pages:960,rating:'4.7',year:2022,badge:''},
+  {id:7,title:'Linear Algebra Done Right',author:'Sheldon Axler',cat:'Mathematics',emoji:'∑',bg:'#FFFBEB',formats:['PDF'],size:'5.8 MB',pages:340,rating:'4.8',year:2023,badge:'new'},
+  {id:8,title:'Probability and Statistics for Engineers',author:'Walpole, Myers & Myers',cat:'Mathematics',emoji:'📊',bg:'#F5F3FF',formats:['PDF'],size:'13.4 MB',pages:816,rating:'4.4',year:2022,badge:''},
+  {id:9,title:'Engineering Mathematics',author:'K.A. Stroud',cat:'Engineering',emoji:'⚙️',bg:'#FFF7ED',formats:['PDF','EPUB'],size:'16.0 MB',pages:1048,rating:'4.6',year:2021,badge:'pop'},
+  {id:10,title:'Use of English for Tertiary Institutions',author:'Ayo Banjo',cat:'General Studies',emoji:'📖',bg:'#F0FDF4',formats:['PDF'],size:'4.2 MB',pages:320,rating:'4.3',year:2022,badge:''},
+  {id:11,title:'Entrepreneurship: A South African Perspective',author:'Nieman & Niewenhuizen',cat:'General Studies',emoji:'💼',bg:'#FFF1F2',formats:['PDF','EPUB'],size:'7.6 MB',pages:412,rating:'4.2',year:2023,badge:'new'},
+  {id:12,title:'Journal of Computer Science & Technology',author:'Various Authors',cat:'Journals',emoji:'📰',bg:'#EFF6FF',formats:['PDF'],size:'3.1 MB',pages:null,rating:'4.7',year:2026,badge:'new'},
+  {id:13,title:'IEEE Transactions on Neural Networks',author:'IEEE',cat:'Journals',emoji:'🧠',bg:'#EEF2FF',formats:['PDF'],size:'5.4 MB',pages:null,rating:'4.9',year:2026,badge:'new'},
+];
+
+let activecat = 'All';
+function renderCats(){
+  document.getElementById('catTabs').innerHTML = CATS.map(c=>`<button class="cat-tab${c===activecat?' active':''}" onclick="selectCat('${c}')">${c==='All'?'🗂 All':c==='Computer Science'?'💻 CS':c==='Mathematics'?'📐 Math':c==='Engineering'?'⚙️ Eng':c==='General Studies'?'📖 General':'📰 Journals'} <span style="background:rgba(255,255,255,.2);border-radius:10px;padding:1px 6px;font-size:11px;">${c==='All'?BOOKS.length:BOOKS.filter(b=>b.cat===c).length}</span></button>`).join('');
+}
+function selectCat(c){ activecat=c; renderCats(); renderBooks(); }
+
+function renderBooks(){
+  const q = document.getElementById('libSearch').value.toLowerCase();
+  const ff = document.getElementById('fmtFilter').value;
+  let list = BOOKS.filter(b=>
+    (activecat==='All'||b.cat===activecat) &&
+    (ff==='all'||b.formats.includes(ff)) &&
+    (!q||b.title.toLowerCase().includes(q)||b.author.toLowerCase().includes(q)||b.cat.toLowerCase().includes(q))
+  );
+  document.getElementById('booksGrid').innerHTML = list.length ? list.map(b=>`
+    <div class="book-card fade-in-1">
+      <div class="book-cover" style="background:${b.bg};">
+        <span>${b.emoji}</span>
+        ${b.badge==='new'?'<span class="badge-new">NEW</span>':b.badge==='pop'?'<span class="badge-pop">🔥 Popular</span>':''}
+      </div>
+      <div class="book-body">
+        <div class="book-title">${b.title}</div>
+        <div class="book-author">${b.author}</div>
+        <div class="book-meta">
+          <div style="display:flex;gap:5px;">${b.formats.map(f=>`<span class="book-format">${f}</span>`).join('')}</div>
+          <div class="book-rating">★ ${b.rating}</div>
+        </div>
+        <div style="font-size:11px;color:var(--gray-400);margin-top:6px;">${b.pages?b.pages+' pages · ':''} ${b.size} · ${b.year}</div>
+      </div>
+      <div class="book-footer">
+        <button class="btn btn-outline btn-sm" onclick="openPreview(${b.id})">👁 Preview</button>
+        <button class="btn btn-primary btn-sm" onclick="fakeDownload('${b.formats[0]}','${b.title}')">⬇ Download</button>
+      </div>
+    </div>`).join('') : '<p style="color:var(--gray-400);font-size:14px;grid-column:1/-1;">No books found matching your search.</p>';
+}
+
+function openPreview(id){
+  const b = BOOKS.find(x=>x.id===id);
+  document.getElementById('previewTop').innerHTML = `
+    <button class="modal-close" onclick="closePreview()">✕</button>
+    <div class="preview-icon" style="background:${b.bg};">${b.emoji}</div>
+    <div>
+      <div style="font-family:var(--font-display);font-size:19px;font-weight:600;color:var(--navy);">${b.title}</div>
+      <div style="font-size:13px;color:var(--gray-500);margin-top:4px;">${b.author} · ${b.year}</div>
+      <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
+        <span class="badge badge-navy">${b.cat}</span>
+        <span class="badge badge-gold">★ ${b.rating}</span>
+        ${b.pages?`<span class="badge" style="background:var(--gray-100);color:var(--gray-700);">${b.pages} pages</span>`:''}
+      </div>
+    </div>`;
+  document.getElementById('previewBody').innerHTML = `
+    <p style="font-size:14px;color:var(--gray-700);line-height:1.7;margin-bottom:20px;">
+      This resource is part of the UMIS Digital Library collection. Authorized students may download for personal academic use. 
+      Please respect copyright and institutional access policies.
+    </p>
+    <div style="font-family:var(--font-display);font-size:16px;font-weight:600;color:var(--navy);margin-bottom:12px;">Available Downloads</div>
+    ${b.formats.map(f=>`
+    <a class="dl-btn" onclick="fakeDownload('${f}','${b.title}');closePreview();" href="javascript:void(0)">
+      <span class="fmt" style="background:${f==='PDF'?'var(--danger-bg)':'var(--info-bg)'};color:${f==='PDF'?'var(--danger)':'var(--info)'};">${f}</span>
+      <div class="info">${b.title}<br><span style="font-size:11px;color:var(--gray-400);font-weight:400;">${b.size}</span></div>
+      <div style="font-size:13px;color:var(--navy);font-weight:700;">⬇ Download</div>
+    </a>`).join('')}
+    <div style="margin-top:14px;padding:12px 16px;background:var(--gold-pale);border-radius:8px;font-size:12px;color:#7A5B00;">
+      ⚠ These resources are licensed for academic use only. Redistribution is prohibited.
+    </div>`;
+  document.getElementById('previewBg').classList.add('open');
+}
+function closePreview(){ document.getElementById('previewBg').classList.remove('open'); }
+
+function fakeDownload(fmt, title){
+  const t = document.getElementById('toast');
+  t.textContent = '✅ Downloading "' + title.substring(0,30) + (title.length>30?'…':'') + '" as ' + fmt;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 3000);
+}
+
+renderCats(); renderBooks();
+</script>
+</body>
+</html>

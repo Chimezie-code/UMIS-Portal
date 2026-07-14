@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About UMIS — University Portal</title>
+  <link rel="stylesheet" href="page.css" />
+  <style>
+    .about-hero {
+      background: linear-gradient(135deg, var(--navy), var(--navy-light));
+      padding: 88px 40px; text-align: center; color: white; position: relative; overflow: hidden;
+    }
+    .about-hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 100%, rgba(201,168,68,0.15), transparent 60%);
+    }
+    .about-hero h1 { font-family: var(--font-display); font-size: 52px; font-weight: 700; position: relative; }
+    .about-hero h1 span { color: var(--gold); }
+    .about-hero p { font-size: 18px; color: rgba(255,255,255,0.72); margin-top: 16px; max-width: 600px; margin-left: auto; margin-right: auto; position: relative; }
+    .about-content { max-width: 1100px; margin: 0 auto; padding: 72px 24px; }
+    .mission-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-bottom: 60px; }
+    .mission-card {
+      background: white; border-radius: var(--radius); box-shadow: var(--shadow); padding: 36px;
+      border-top: 4px solid var(--gold);
+    }
+    .mission-card .icon { font-size: 36px; margin-bottom: 18px; }
+    .mission-card h3 { font-family: var(--font-display); font-size: 24px; font-weight: 700; color: var(--navy); margin-bottom: 12px; }
+    .mission-card p { font-size: 15px; color: var(--gray-500); line-height: 1.75; }
+    .team-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 24px; }
+    .team-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 28px; text-align: center; }
+    .team-avatar { width: 70px; height: 70px; border-radius: 50%; background: rgba(11,31,75,0.08); margin: 0 auto 14px; display: flex; align-items: center; justify-content: center; font-size: 28px; }
+    .team-name { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--navy); }
+    .team-title { font-size: 13px; color: var(--gray-500); margin-top: 4px; }
+    .team-dept { font-size: 12px; color: var(--gold); font-weight: 600; margin-top: 6px; }
+    .values-section { background: var(--navy); padding: 72px 0; }
+    .value-item { text-align: center; color: white; }
+    .value-item .v-icon { font-size: 36px; margin-bottom: 14px; }
+    .value-item h4 { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--gold); margin-bottom: 8px; }
+    .value-item p { font-size: 14px; color: rgba(255,255,255,0.65); line-height: 1.65; }
+    @media (max-width: 768px) {
+      .mission-grid, .team-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<nav class="portal-nav">
+  <a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\home.html" class="brand"><div class="brand-icon">U</div><div class="brand-text">UMIS <span>Portal</span></div></a>
+  <ul class="nav-links">
+    <li><a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\home.html">Home</a></li>
+    <li><a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\help.html" class="active">About Us</a></li>
+    <li><a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\Addmission.html">Admission</a></li>
+    <li><a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\Academic_page.html">Academic</a></li>
+    <li><a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\Student_page.html" class="nav-cta">Student Portal →</a></li>
+  </ul>
+</nav>
+
+<div class="about-hero">
+  <h1>About <span>UMIS</span></h1>
+  <p>The University Management Information System — your complete digital gateway to academic excellence and university services.</p>
+</div>
+
+<div class="about-content">
+  <!-- ABOUT TEXT -->
+  <div style="max-width:780px;margin:0 auto 60px;text-align:center;">
+    <span class="section-label">Our Story</span>
+    <h2 class="section-title" style="margin-top:8px;">Built for <span class="text-gold">Academic Excellence</span></h2>
+    <p style="font-size:16px;color:var(--gray-500);margin-top:18px;line-height:1.85;">
+      The University Management Information System (UMIS) was created to bring students, lecturers, and administration together on a single, powerful digital platform. We believe in making university life more efficient, transparent, and accessible for everyone in our community.
+    </p>
+    <p style="font-size:16px;color:var(--gray-500);margin-top:16px;line-height:1.85;">
+      From registration and fee payments to course management and results viewing — UMIS streamlines every academic process so you can focus on what matters most: learning and growing.
+    </p>
+  </div>
+
+  <!-- MISSION & VISION -->
+  <div class="mission-grid">
+    <div class="mission-card fade-in-1">
+      <div class="icon">🎯</div>
+      <h3>Our Mission</h3>
+      <p>To provide a seamless, secure, and comprehensive digital management system that empowers students, supports faculty, and enables administration to deliver world-class university services.</p>
+    </div>
+    <div class="mission-card fade-in-2">
+      <div class="icon">🌟</div>
+      <h3>Our Vision</h3>
+      <p>To be the leading university information system in Africa — driving digital transformation in higher education through innovation, reliability, and a deep commitment to academic excellence.</p>
+    </div>
+  </div>
+
+  <!-- TEAM -->
+  <div style="margin-bottom:60px;">
+    <div class="text-center mb-6">
+      <span class="section-label">Leadership</span>
+      <h2 class="section-title" style="margin-top:8px;">Academic <span class="text-gold">Leadership</span></h2>
+    </div>
+    <div class="team-grid">
+      <div class="team-card fade-in-1">
+        <div class="team-avatar">👨‍🏫</div>
+        <div class="team-name">Prof. Chukwuemeka Obi</div>
+        <div class="team-title">Vice Chancellor</div>
+        <div class="team-dept">University Administration</div>
+      </div>
+      <div class="team-card fade-in-2">
+        <div class="team-avatar">👩‍💼</div>
+        <div class="team-name">Dr. Fatima Al-Hassan</div>
+        <div class="team-title">Deputy VC (Academics)</div>
+        <div class="team-dept">Academic Affairs</div>
+      </div>
+      <div class="team-card fade-in-3">
+        <div class="team-avatar">👨‍💻</div>
+        <div class="team-name">Mr. Tunde Afolabi</div>
+        <div class="team-title">Head of ICT</div>
+        <div class="team-dept">UMIS Development</div>
+      </div>
+      <div class="team-card fade-in-4">
+        <div class="team-avatar">👩‍🎓</div>
+        <div class="team-name">Dr. Ngozi Eze</div>
+        <div class="team-title">Dean, Sciences</div>
+        <div class="team-dept">Science & Technology</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- VALUES -->
+<div class="values-section">
+  <div class="container">
+    <div class="text-center" style="margin-bottom:52px;">
+      <span class="section-label">Our Values</span>
+      <h2 class="section-title" style="color:white;">What Drives <span class="text-gold">Everything We Do</span></h2>
+    </div>
+    <div class="grid-4">
+      <div class="value-item fade-in-1"><div class="v-icon">🏆</div><h4>Excellence</h4><p>We set the highest standards in everything we do for our university community.</p></div>
+      <div class="value-item fade-in-2"><div class="v-icon">🛡️</div><h4>Integrity</h4><p>Transparency and honesty in every transaction and interaction on our platform.</p></div>
+      <div class="value-item fade-in-3"><div class="v-icon">🤝</div><h4>Community</h4><p>Building meaningful connections between students, faculty, and administration.</p></div>
+      <div class="value-item fade-in-4"><div class="v-icon">🚀</div><h4>Innovation</h4><p>Continuously improving our system to meet the needs of modern education.</p></div>
+    </div>
+  </div>
+</div>
+
+<footer class="portal-footer">
+  <p>© 2026 <strong>UMIS</strong> — University Management Information System. All rights reserved.</p>
+  <p style="margin-top:8px;"><a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\home.html">Home</a><a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\Addmission.html">Admission</a><a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\help.html">Support</a><a href="library.html">Library</a></p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Upload Material — UMIS Portal</title>
+  <link rel="stylesheet" href="page1.css" />
+  <style>
+    .page-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .upload-section { margin-bottom: 28px; }
+    .section-title {
+      font-family: var(--font-display); font-size: 17px; font-weight: 700;
+      color: var(--navy); padding-bottom: 12px; border-bottom: 2px solid var(--gold);
+      margin-bottom: 18px; display: flex; align-items: center; gap: 8px;
+    }
+
+    .material-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 14px; border: 1px solid var(--gray-200);
+      border-radius: var(--radius-sm); margin-bottom: 8px;
+      background: #fff; transition: var(--transition);
+    }
+    .material-item:hover { border-color: var(--navy); box-shadow: var(--shadow-xs); }
+    .material-icon {
+      width: 40px; height: 40px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center; font-size: 20px;
+      flex-shrink: 0;
+    }
+    .material-icon.pdf { background: #fdecea; }
+    .material-icon.doc { background: var(--blue-pale); }
+    .material-icon.ppt { background: rgba(180,80,20,.1); }
+    .material-icon.img { background: var(--green-pale); }
+    .material-icon.other { background: var(--gray-100); }
+    .material-name { font-size: 13.5px; font-weight: 600; color: var(--navy); }
+    .material-meta { font-size: 11.5px; color: var(--gray-500); }
+    .material-actions { margin-left: auto; display: flex; gap: 6px; }
+
+    /* TIMETABLE GRID */
+    .tt-grid-wrap { overflow-x: auto; }
+    .tt-grid {
+      width: 100%; border-collapse: collapse; min-width: 600px;
+    }
+    .tt-grid th {
+      background: var(--navy); color: white; padding: 10px 12px;
+      font-size: 12px; font-weight: 700; letter-spacing: .5px; text-align: center;
+    }
+    .tt-grid td {
+      border: 1px solid var(--gray-200); padding: 6px;
+      min-width: 90px; height: 58px; vertical-align: top;
+      background: var(--gray-50);
+    }
+    .tt-grid td:first-child {
+      background: var(--navy); color: white;
+      font-size: 11px; font-weight: 700; text-align: center;
+      width: 68px; min-width: 68px;
+    }
+    .tt-slot {
+      font-size: 11px; padding: 4px 6px; border-radius: 5px;
+      font-weight: 600; cursor: pointer; white-space: nowrap; overflow: hidden;
+      text-overflow: ellipsis; transition: var(--transition);
+    }
+    .tt-slot:hover { opacity: .8; }
+    .tt-slot.navy { background: var(--navy); color: white; }
+    .tt-slot.gold { background: var(--gold); color: var(--navy); }
+    .tt-slot.green { background: var(--green); color: white; }
+    .tt-slot.blue { background: var(--blue); color: white; }
+    .tt-add-btn {
+      width: 100%; height: 100%; border: none; background: transparent;
+      cursor: pointer; color: var(--gray-300); font-size: 18px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .tt-add-btn:hover { color: var(--navy); background: rgba(11,31,75,.04); border-radius: 5px; }
+
+    /* Slot modal */
+    .color-options { display: flex; gap: 8px; margin-top: 6px; }
+    .color-dot {
+      width: 28px; height: 28px; border-radius: 50%; cursor: pointer;
+      border: 2px solid transparent; transition: var(--transition);
+    }
+    .color-dot:hover, .color-dot.selected { border-color: var(--gray-400); transform: scale(1.15); }
+
+    .upload-progress { margin-top: 12px; display: none; }
+    .upload-bar { height: 8px; background: var(--gray-200); border-radius: 99px; overflow: hidden; }
+    .upload-fill { height: 100%; background: var(--gold); border-radius: 99px; width: 0; transition: width .3s ease; }
+  </style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-text">UMIS <span>Portal</span></div>
+      <div class="brand-sub">Staff Dashboard</div>
+    </div>
+    <div class="sidebar-user">
+      <div class="user-avatar">AB</div>
+      <div>
+        <div class="user-name">Dr. Adewale Bello</div>
+        <div class="user-role">Senior Lecturer · Comp. Science</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">Main</div>
+      <a href="Lecturer_page.html"><span class="icon">🏠</span> Dashboard</a>
+      <a href="Lecturer_page.html#courses"><span class="icon">📚</span> My Courses</a>
+      <a href="Lecturer_page.html#students"><span class="icon">👥</span> My Students</a>
+      <a href="assignments.html"><span class="icon">📋</span> Assignments</a>
+      <div class="nav-section-title">Resources</div>
+      <a href="library.html"><span class="icon">🏛️</span> E-Library</a>
+      <a href="upload_material.html" class="active"><span class="icon">📤</span> Upload Material</a>
+      <div class="nav-section-title">Account</div>
+      <a href="#"><span class="icon">👤</span> My Profile</a>
+      <a href="home.html"><span class="icon">🚪</span> Logout</a>
+    </nav>
+    <div class="sidebar-footer">© 2026 UMIS Portal</div>
+  </aside>
+
+  <div class="main-content">
+    <div class="main-topbar">
+      <div class="topbar-title">Upload Material</div>
+      <div class="topbar-right">
+        <button class="notification-btn">🔔</button>
+        <span class="badge badge-gold">2025/2026 Sem 2</span>
+      </div>
+    </div>
+
+    <div class="content-area">
+      <div class="page-grid">
+        <!-- LEFT: UPLOAD FILES -->
+        <div>
+          <!-- Course Material Upload -->
+          <div class="upload-section">
+            <div class="section-title">📁 Course Materials</div>
+            <div class="card">
+              <div class="form-group">
+                <label class="form-label">Select Course</label>
+                <select class="form-control" id="materialCourse">
+                  <option value="">— Choose a course —</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Material Type</label>
+                <select class="form-control" id="materialType">
+                  <option value="Lecture Notes">📄 Lecture Notes</option>
+                  <option value="Slides">📊 Slides / Presentation</option>
+                  <option value="Past Questions">📋 Past Questions</option>
+                  <option value="Reference">📚 Reference Material</option>
+                  <option value="Other">📎 Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Description (optional)</label>
+                <textarea class="form-control" id="materialDesc" rows="2" placeholder="Brief description of this material…"></textarea>
+              </div>
+              <div class="drop-zone" id="materialDropZone" onclick="document.getElementById('materialFileInput').click()" ondragover="handleDrag(event,'materialDropZone')" ondragleave="handleDragLeave(event,'materialDropZone')" ondrop="handleDrop(event,'materialDropZone','materialFile')">
+                <div class="drop-zone-icon">📂</div>
+                <div class="drop-zone-text" id="materialFileLabel">Click to choose file or drag & drop</div>
+                <div class="drop-zone-sub">PDF, DOC, PPTX, images — max 20 MB</div>
+                <input type="file" id="materialFileInput" accept=".pdf,.doc,.docx,.ppt,.pptx,.jpg,.jpeg,.png" onchange="previewFile(this,'materialFileLabel','materialFile')">
+              </div>
+              <div id="materialFileHidden"></div>
+              <div class="upload-progress" id="materialProgress">
+                <div class="upload-bar"><div class="upload-fill" id="materialFill"></div></div>
+                <div style="font-size:12px;color:var(--gray-500);margin-top:5px;">Uploading…</div>
+              </div>
+              <button class="btn btn-gold" style="width:100%;margin-top:14px;" onclick="uploadMaterial()">📤 Upload Material</button>
+            </div>
+          </div>
+
+          <!-- Uploaded Materials List -->
+          <div class="section-title">📋 Uploaded Materials</div>
+          <div id="materialsList">
+            <div class="empty-state" id="materialsEmpty" style="padding:30px 0;">
+              <div class="empty-icon">📭</div>
+              <div class="empty-title">No materials uploaded</div>
+              <div class="empty-desc">Upload lecture notes, slides, or resources above.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: TIMETABLE -->
+        <div>
+          <div id="timetable" class="upload-section">
+            <div class="section-title">📅 Semester Timetable</div>
+            <div class="card" style="margin-bottom:16px;">
+              <p style="font-size:13.5px;color:var(--gray-600);margin-bottom:14px;">
+                Build your weekly timetable by clicking the <strong>+</strong> cells. Students will see this on their timetable page.
+              </p>
+              <div style="display:flex;gap:8px;margin-bottom:12px;">
+                <button class="btn btn-gold btn-sm" onclick="saveTimetable()">💾 Save Timetable</button>
+                <button class="btn btn-outline btn-sm" onclick="clearTimetable()">🗑️ Clear All</button>
+                <button class="btn btn-ghost btn-sm" onclick="loadSampleTimetable()">✨ Load Sample</button>
+              </div>
+              <div class="tt-grid-wrap">
+                <table class="tt-grid" id="ttTable"></table>
+              </div>
+            </div>
+          </div>
+
+          <!-- ALSO: upload CSV timetable -->
+          <div class="section-title">📂 Upload Timetable File</div>
+          <div class="card">
+            <p style="font-size:13px;color:var(--gray-500);margin-bottom:12px;">Or upload an existing timetable file (CSV, PDF, image). Students will be able to download it.</p>
+            <div class="drop-zone" id="ttDropZone" onclick="document.getElementById('ttFileInput').click()" ondragover="handleDrag(event,'ttDropZone')" ondragleave="handleDragLeave(event,'ttDropZone')" ondrop="handleDrop(event,'ttDropZone','ttFile')">
+              <div class="drop-zone-icon">📅</div>
+              <div class="drop-zone-text" id="ttFileLabel">Click to upload timetable file</div>
+              <div class="drop-zone-sub">CSV, PDF, PNG, JPEG</div>
+              <input type="file" id="ttFileInput" accept=".csv,.pdf,.png,.jpg,.jpeg" onchange="previewFile(this,'ttFileLabel','ttFile')">
+            </div>
+            <div id="ttFileHidden"></div>
+            <button class="btn btn-primary" style="width:100%;margin-top:12px;" onclick="uploadTimetableFile()">📤 Publish Timetable File</button>
+            <div id="ttFileStatus" style="display:none;text-align:center;padding-top:10px;">
+              <span class="badge badge-success">✓ Timetable file published — students can view it</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLOT MODAL -->
+<div class="modal-overlay" id="slotModal">
+  <div class="modal" style="max-width:420px;">
+    <div class="modal-header">
+      <div class="modal-title" id="slotModalTitle">Add Class Slot</div>
+      <button class="modal-close" onclick="closeSlotModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Course</label>
+        <select class="form-control" id="slotCourse">
+          <option value="">— Select course —</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Venue</label>
+        <input type="text" class="form-control" id="slotVenue" placeholder="e.g. LT1, Hall B, ICT Lab 3">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Color</label>
+        <div class="color-options" id="colorOptions">
+          <div class="color-dot navy selected" style="background:var(--navy);" data-color="navy" onclick="selectColor(this)"></div>
+          <div class="color-dot gold" style="background:var(--gold);" data-color="gold" onclick="selectColor(this)"></div>
+          <div class="color-dot green" style="background:var(--green);" data-color="green" onclick="selectColor(this)"></div>
+          <div class="color-dot blue" style="background:var(--blue);" data-color="blue" onclick="selectColor(this)"></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="clearSlot()">Clear Slot</button>
+      <button class="btn btn-ghost" onclick="closeSlotModal()">Cancel</button>
+      <button class="btn btn-gold" onclick="saveSlot()">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+// ── TIMETABLE ─────────────────────────────────────────────
+const DAYS = ['MON','TUE','WED','THU','FRI'];
+const TIMES = ['07:00','08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00'];
+let ttData = {};
+let editCell = null;
+let selectedColor = 'navy';
+
+function buildTTTable() {
+  const table = document.getElementById('ttTable');
+  let html = '<thead><tr><th>Time</th>';
+  DAYS.forEach(d => html += `<th>${d}</th>`);
+  html += '</tr></thead><tbody>';
+  TIMES.forEach(t => {
+    html += `<tr><td>${t}</td>`;
+    DAYS.forEach(d => {
+      const key = `${d}_${t}`;
+      const slot = ttData[key];
+      html += `<td id="cell_${key}">`;
+      if (slot) {
+        html += `<div class="tt-slot ${slot.color}" onclick="openSlotModal('${d}','${t}')">${slot.code}<br><span style="font-weight:400;font-size:10px;">${slot.venue||''}</span></div>`;
+      } else {
+        html += `<button class="tt-add-btn" onclick="openSlotModal('${d}','${t}')">+</button>`;
+      }
+      html += '</td>';
+    });
+    html += '</tr>';
+  });
+  html += '</tbody>';
+  table.innerHTML = html;
+}
+
+function loadTTData() {
+  try { ttData = JSON.parse(localStorage.getItem('timetableGrid') || '{}'); } catch { ttData = {}; }
+  buildTTTable();
+}
+
+function saveTimetable() {
+  localStorage.setItem('timetableGrid', JSON.stringify(ttData));
+  showToast('✅ Timetable saved — students can view it now', 'success');
+}
+
+function clearTimetable() {
+  if (!confirm('Clear the entire timetable?')) return;
+  ttData = {};
+  localStorage.removeItem('timetableGrid');
+  buildTTTable();
+  showToast('Timetable cleared', 'warn');
+}
+
+function loadSampleTimetable() {
+  const codes = getSelectedCourses();
+  const palette = ['navy','gold','green','blue'];
+  const slots = [
+    ['MON','08:00'],['MON','10:00'],['TUE','09:00'],
+    ['WED','08:00'],['WED','11:00'],['THU','10:00'],
+    ['FRI','08:00'],['FRI','14:00']
+  ];
+  ttData = {};
+  slots.forEach(([d,t], i) => {
+    const code = codes[i % Math.max(codes.length,1)] || 'CSC 401';
+    ttData[`${d}_${t}`] = { code, venue: 'LT'+(i%4+1), color: palette[i%4] };
+  });
+  buildTTTable();
+  showToast('Sample timetable loaded — click Save to publish', '');
+}
+
+function openSlotModal(day, time) {
+  editCell = { day, time };
+  document.getElementById('slotModalTitle').textContent = `${day} · ${time}`;
+  // populate courses
+  const courses = getSelectedCourses();
+  const sel = document.getElementById('slotCourse');
+  sel.innerHTML = '<option value="">— Select course —</option>' +
+    courses.map(c => `<option value="${c}">${c}</option>`).join('');
+  const existing = ttData[`${day}_${time}`];
+  if (existing) {
+    sel.value = existing.code;
+    document.getElementById('slotVenue').value = existing.venue || '';
+    selectColorByName(existing.color);
+  } else {
+    sel.value = '';
+    document.getElementById('slotVenue').value = '';
+    selectColorByName('navy');
+  }
+  document.getElementById('slotModal').classList.add('open');
+}
+function closeSlotModal() { document.getElementById('slotModal').classList.remove('open'); editCell=null; }
+
+function selectColor(el) {
+  document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedColor = el.dataset.color;
+}
+function selectColorByName(name) {
+  document.querySelectorAll('.color-dot').forEach(d => {
+    d.classList.toggle('selected', d.dataset.color === name);
+  });
+  selectedColor = name;
+}
+
+function saveSlot() {
+  if (!editCell) return;
+  const code = document.getElementById('slotCourse').value;
+  const venue = document.getElementById('slotVenue').value;
+  if (!code) { showToast('Please select a course', 'error'); return; }
+  ttData[`${editCell.day}_${editCell.time}`] = { code, venue, color: selectedColor };
+  buildTTTable();
+  closeSlotModal();
+}
+function clearSlot() {
+  if (!editCell) return;
+  delete ttData[`${editCell.day}_${editCell.time}`];
+  buildTTTable();
+  closeSlotModal();
+}
+
+function getSelectedCourses() {
+  try { return JSON.parse(localStorage.getItem('lecturerCourses') || '[]'); } catch{ return []; }
+}
+
+// ── MATERIALS ─────────────────────────────────────────────
+let pendingMaterialFile = null;
+let pendingTTFile = null;
+
+function populateCourseSelect() {
+  const courses = getSelectedCourses();
+  const sel = document.getElementById('materialCourse');
+  const slotSel = document.getElementById('slotCourse');
+  sel.innerHTML = '<option value="">— Choose a course —</option>' +
+    courses.map(c => `<option value="${c}">${c}</option>`).join('');
+  slotSel.innerHTML = '<option value="">— Select course —</option>' +
+    courses.map(c => `<option value="${c}">${c}</option>`).join('');
+}
+
+function previewFile(input, labelId, fileVar) {
+  const file = input.files[0];
+  if (!file) return;
+  document.getElementById(labelId).textContent = `📄 ${file.name} (${(file.size/1024).toFixed(1)} KB)`;
+  if (fileVar === 'materialFile') pendingMaterialFile = file;
+  else pendingTTFile = file;
+}
+
+function handleDrag(e, zoneId) {
+  e.preventDefault();
+  document.getElementById(zoneId).classList.add('drag-over');
+}
+function handleDragLeave(e, zoneId) {
+  document.getElementById(zoneId).classList.remove('drag-over');
+}
+function handleDrop(e, zoneId, fileVar) {
+  e.preventDefault();
+  document.getElementById(zoneId).classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (!file) return;
+  const labelId = zoneId === 'materialDropZone' ? 'materialFileLabel' : 'ttFileLabel';
+  document.getElementById(labelId).textContent = `📄 ${file.name} (${(file.size/1024).toFixed(1)} KB)`;
+  if (fileVar === 'materialFile') pendingMaterialFile = file;
+  else pendingTTFile = file;
+}
+
+function simulateUpload(fillId, progressId, cb) {
+  const progress = document.getElementById(progressId);
+  const fill = document.getElementById(fillId);
+  progress.style.display = '';
+  fill.style.width = '0';
+  let w = 0;
+  const interval = setInterval(() => {
+    w += Math.random() * 22 + 8;
+    fill.style.width = Math.min(w, 95) + '%';
+    if (w >= 95) {
+      clearInterval(interval);
+      fill.style.width = '100%';
+      setTimeout(() => { progress.style.display = 'none'; cb(); }, 400);
+    }
+  }, 120);
+}
+
+function uploadMaterial() {
+  const course = document.getElementById('materialCourse').value;
+  const type = document.getElementById('materialType').value;
+  const desc = document.getElementById('materialDesc').value;
+  if (!course) { showToast('Please select a course', 'error'); return; }
+  const fileName = pendingMaterialFile ? pendingMaterialFile.name : `${type.replace(/\s/g,'_')}_${course.replace(' ','')}_${Date.now()}.pdf`;
+  simulateUpload('materialFill','materialProgress', () => {
+    const materials = getMaterials();
+    materials.push({ id: Date.now(), course, type, desc, fileName, date: new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}) });
+    localStorage.setItem('uploadedMaterials', JSON.stringify(materials));
+    pendingMaterialFile = null;
+    document.getElementById('materialFileLabel').textContent = 'Click to choose file or drag & drop';
+    document.getElementById('materialDesc').value = '';
+    renderMaterials();
+    showToast(`✅ ${type} uploaded for ${course}`, 'success');
+  });
+}
+
+function uploadTimetableFile() {
+  if (!pendingTTFile) { showToast('Please select a file first', 'error'); return; }
+  localStorage.setItem('timetableFile', JSON.stringify({ name: pendingTTFile.name, date: new Date().toLocaleDateString() }));
+  document.getElementById('ttFileStatus').style.display = '';
+  showToast('✅ Timetable file published to students', 'success');
+}
+
+function getMaterials() {
+  try { return JSON.parse(localStorage.getItem('uploadedMaterials') || '[]'); } catch{ return []; }
+}
+
+function getFileIcon(name) {
+  const ext = name?.split('.').pop()?.toLowerCase();
+  if (ext === 'pdf') return { icon:'📕', cls:'pdf' };
+  if (['doc','docx'].includes(ext)) return { icon:'📘', cls:'doc' };
+  if (['ppt','pptx'].includes(ext)) return { icon:'📙', cls:'ppt' };
+  if (['png','jpg','jpeg'].includes(ext)) return { icon:'🖼️', cls:'img' };
+  return { icon:'📎', cls:'other' };
+}
+
+function renderMaterials() {
+  const materials = getMaterials();
+  const list = document.getElementById('materialsList');
+  if (materials.length === 0) {
+    list.innerHTML = document.getElementById('materialsEmpty')?.outerHTML || `<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-title">No materials uploaded</div></div>`;
+    return;
+  }
+  list.innerHTML = materials.slice().reverse().map(m => {
+    const fi = getFileIcon(m.fileName);
+    return `<div class="material-item">
+      <div class="material-icon ${fi.cls}">${fi.icon}</div>
+      <div style="flex:1;">
+        <div class="material-name">${m.fileName}</div>
+        <div class="material-meta">${m.course} · ${m.type} · ${m.date}</div>
+        ${m.desc?`<div style="font-size:11.5px;color:var(--gray-500);margin-top:2px;">${m.desc}</div>`:''}
+      </div>
+      <div class="material-actions">
+        <span class="badge badge-success">✓ Shared</span>
+        <button class="btn btn-sm btn-ghost" style="color:var(--red);" onclick="deleteMaterial(${m.id})">🗑️</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function deleteMaterial(id) {
+  const materials = getMaterials().filter(m => m.id !== id);
+  localStorage.setItem('uploadedMaterials', JSON.stringify(materials));
+  renderMaterials();
+  showToast('Material removed', 'warn');
+}
+
+function showToast(msg, type='') {
+  const t = document.createElement('div');
+  t.className = `toast ${type?'toast-'+type:''}`;
+  t.textContent = msg;
+  document.getElementById('toastContainer').appendChild(t);
+  setTimeout(() => t.remove(), 3500);
+}
+
+// ── INIT ──────────────────────────────────────────────────
+populateCourseSelect();
+loadTTData();
+renderMaterials();
+const ttFileSaved = localStorage.getItem('timetableFile');
+if (ttFileSaved) {
+  const f = JSON.parse(ttFileSaved);
+  document.getElementById('ttFileLabel').textContent = `📅 ${f.name}`;
+  document.getElementById('ttFileStatus').style.display = '';
+}
+</script>
+</body>
+</html>

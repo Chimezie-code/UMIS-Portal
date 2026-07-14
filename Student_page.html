@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Registration — UMIS Portal</title>
+  <link rel="stylesheet" href="page.css" />
+  <style>
+    .reg-layout {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      min-height: calc(100vh - 68px);
+    }
+    .reg-sidebar {
+      background: var(--navy);
+      padding: 48px 36px;
+      color: white;
+      position: sticky;
+      top: 68px;
+      height: calc(100vh - 68px);
+      overflow-y: auto;
+    }
+    .reg-sidebar h2 {
+      font-family: var(--font-display);
+      font-size: 30px;
+      font-weight: 700;
+      color: white;
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+    .reg-sidebar h2 span { color: var(--gold); }
+    .reg-sidebar p {
+      font-size: 14px;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.7;
+      margin-bottom: 32px;
+    }
+    .steps-list { list-style: none; }
+    .steps-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      font-size: 14px;
+      color: rgba(255,255,255,0.7);
+    }
+    .steps-list li:last-child { border-bottom: none; }
+    .step-num {
+      width: 28px; height: 28px;
+      background: rgba(201,168,68,0.2);
+      border: 1px solid rgba(201,168,68,0.4);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; color: var(--gold);
+      flex-shrink: 0;
+    }
+    .steps-list li.done .step-num {
+      background: var(--gold);
+      color: var(--navy);
+    }
+    .reg-form-area {
+      background: var(--cream);
+      padding: 48px;
+      overflow-y: auto;
+    }
+    .form-card {
+      background: white;
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      max-width: 760px;
+    }
+    .form-card-header {
+      background: linear-gradient(90deg, var(--navy), var(--navy-light));
+      padding: 28px 36px;
+    }
+    .form-card-header h3 {
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 700;
+      color: white;
+    }
+    .form-card-header p { font-size: 13px; color: rgba(255,255,255,0.65); margin-top: 5px; }
+    .form-section {
+      padding: 32px 36px;
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .form-section:last-child { border-bottom: none; }
+    .form-section-title {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 22px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .form-section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--gray-200);
+    }
+    .form-actions {
+      padding: 28px 36px;
+      background: var(--gray-50);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .login-link {
+      font-size: 13px;
+      color: var(--gray-500);
+    }
+    .login-link a {
+      color: var(--navy);
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .login-link a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="portal-nav">
+  <a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\home.html" class="brand">
+    <div class="brand-icon">U</div>
+    <div class="brand-text">UMIS <span>Portal</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\home.html">Home</a></li>
+    <li><a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\help.html">About Us</a></li>
+    <li><a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\Addmission.html">Admission</a></li>
+  </ul>
+</nav>
+
+<div class="reg-layout">
+  <!-- SIDEBAR -->
+  <div class="reg-sidebar">
+    <h2>Student <span>Registration</span></h2>
+    <p>Create your UMIS student account to access your academic portal, view results, and manage your enrollment.</p>
+    <ul class="steps-list">
+      <li class="done">
+        <div class="step-num">✓</div>
+        <div><strong style="color:white">Personal Information</strong><br>Your name, date of birth, gender</div>
+      </li>
+      <li>
+        <div class="step-num">2</div>
+        <div>Contact Details<br>Address and phone number</div>
+      </li>
+      <li>
+        <div class="step-num">3</div>
+        <div>Academic Information<br>Department, level, programme</div>
+      </li>
+      <li>
+        <div class="step-num">4</div>
+        <div>Account Credentials<br>Set your login password</div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- FORM AREA -->
+  <div class="reg-form-area">
+    <div class="form-card fade-in">
+      <div class="form-card-header">
+        <h3>Create Student Account</h3>
+        <p>All fields marked with * are required</p>
+      </div>
+
+      <div id="alert" class="alert" style="margin:20px 36px 0;"></div>
+
+      <form id="studentForm">
+        <!-- PERSONAL INFO -->
+        <div class="form-section">
+          <div class="form-section-title">👤 Personal Information</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>First Name *</label>
+              <input type="text" name="firstName" placeholder="e.g. James" required />
+            </div>
+            <div class="form-group">
+              <label>Last Name *</label>
+              <input type="text" name="lastName" placeholder="e.g. Okafor" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Date of Birth *</label>
+              <input type="date" name="dateOfBirth" required />
+            </div>
+            <div class="form-group">
+              <label>Gender *</label>
+              <select name="gender" required>
+                <option value="">Select gender</option>
+                <option>Male</option>
+                <option>Female</option>
+                <option>Prefer not to say</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Nationality</label>
+            <input type="text" name="nationality" placeholder="e.g. Nigerian" />
+          </div>
+        </div>
+
+        <!-- CONTACT -->
+        <div class="form-section">
+          <div class="form-section-title">📞 Contact Details</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Email Address *</label>
+              <input type="email" name="email" placeholder="student@university.edu" required />
+            </div>
+            <div class="form-group">
+              <label>Phone Number *</label>
+              <input type="tel" name="phone" placeholder="+234 800 000 0000" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Home Address</label>
+            <textarea name="address" placeholder="Full residential address"></textarea>
+          </div>
+        </div>
+
+        <!-- ACADEMIC INFO -->
+        <div class="form-section">
+          <div class="form-section-title">🎓 Academic Information</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Student ID</label>
+              <input type="text" name="studentId" placeholder="Auto-generated on save" readonly style="background:var(--gray-50);color:var(--gray-400);" />
+            </div>
+            <div class="form-group">
+              <label>Year of Entry *</label>
+              <select name="yearOfEntry" required>
+                <option value="">Select year</option>
+                <option>2026</option><option>2025</option><option>2024</option>
+                <option>2023</option><option>2022</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Faculty *</label>
+              <select name="faculty" required>
+                <option value="">Select faculty</option>
+                <option>Science & Technology</option>
+                <option>Engineering</option>
+                <option>Arts & Humanities</option>
+                <option>Business Administration</option>
+                <option>Social Sciences</option>
+                <option>Medicine & Health Sciences</option>
+                <option>Law</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Department *</label>
+              <input type="text" name="department" placeholder="e.g. Computer Science" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Current Level *</label>
+              <select name="level" required>
+                <option value="">Select level</option>
+                <option>100 Level</option><option>200 Level</option>
+                <option>300 Level</option><option>400 Level</option>
+                <option>500 Level</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Programme Type</label>
+              <select name="programme">
+                <option>Full-Time</option>
+                <option>Part-Time</option>
+                <option>Distance Learning</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- CREDENTIALS -->
+        <div class="form-section">
+          <div class="form-section-title">🔑 Account Credentials</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Password *</label>
+              <input type="password" name="password" placeholder="Minimum 8 characters" required minlength="8" />
+            </div>
+            <div class="form-group">
+              <label>Confirm Password *</label>
+              <input type="password" name="confirmPassword" placeholder="Re-enter password" required />
+            </div>
+          </div>
+        </div>
+
+        <!-- ACTIONS -->
+        <div class="form-actions">
+          <div class="login-link">Already registered? <a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\Academic_page.html">Access your dashboard →</a></div>
+          <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">
+            <span id="btnText">Create Account</span>
+            <div class="spinner" id="spinner"></div>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  const API = 'http://localhost:3000/api';
+
+  document.getElementById('studentForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(this));
+    const alert = document.getElementById('alert');
+
+    // Validate passwords match
+    if (data.password !== data.confirmPassword) {
+      alert.className = 'alert alert-danger show';
+      alert.textContent = '❌ Passwords do not match. Please try again.';
+      return;
+    }
+    delete data.confirmPassword;
+
+    // Show spinner
+    document.getElementById('btnText').textContent = 'Registering...';
+    document.getElementById('spinner').style.display = 'block';
+    document.getElementById('submitBtn').disabled = true;
+
+    try {
+      const res = await fetch(`${API}/students`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      const result = await res.json();
+
+      if (res.ok) {
+        alert.className = 'alert alert-success show';
+        alert.innerHTML = `✅ <strong>Registration successful!</strong> Your Student ID is <strong>${result.student?.studentId || 'UMIS-' + Date.now()}</strong>. Redirecting to dashboard...`;
+        setTimeout(() => window.location.href = 'academic.html', 2500);
+      } else {
+        alert.className = 'alert alert-danger show';
+        alert.textContent = '❌ ' + (result.message || 'Registration failed. Please check your details.');
+      }
+    } catch (err) {
+      alert.className = 'alert alert-danger show';
+      alert.innerHTML = '⚠️ Unable to connect to the server. <a href="../README.md" style="color:inherit;font-weight:700">Start the backend</a> first, or check your connection.';
+    } finally {
+      document.getElementById('btnText').textContent = 'Create Account';
+      document.getElementById('spinner').style.display = 'none';
+      document.getElementById('submitBtn').disabled = false;
+    }
+  });
+</script>
+</body>
+</html>

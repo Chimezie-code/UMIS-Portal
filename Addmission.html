@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admission Application — UMIS Portal</title>
+  <link rel="stylesheet" href="page.css" />
+  <style>
+    .page-layout { display: grid; grid-template-columns: 1fr 360px; gap: 32px; max-width: 1100px; margin: 48px auto; padding: 0 24px 60px; }
+    .form-card { background: white; border-radius: 18px; box-shadow: var(--shadow); overflow: hidden; }
+    .form-card-header {
+      background: linear-gradient(135deg, var(--navy), var(--navy-light));
+      padding: 32px 36px;
+    }
+    .form-card-header h2 { font-family: var(--font-display); font-size: 28px; font-weight: 700; color: white; }
+    .form-card-header p { font-size: 13px; color: rgba(255,255,255,0.65); margin-top: 6px; }
+    .form-section { padding: 28px 36px; border-bottom: 1px solid var(--gray-100); }
+    .form-section:last-of-type { border-bottom: none; }
+    .form-section-title { font-size: 11px; font-weight: 800; letter-spacing: 1.8px; text-transform: uppercase; color: var(--gold); margin-bottom: 20px; }
+    .form-actions { padding: 24px 36px; background: var(--gray-50); display: flex; justify-content: flex-end; gap: 12px; }
+
+    /* SIDEBAR INFO CARDS */
+    .info-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); padding: 26px; margin-bottom: 20px; }
+    .info-card h4 { font-family: var(--font-display); font-size: 19px; font-weight: 700; color: var(--navy); margin-bottom: 14px; }
+    .requirement-item { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--gray-100); font-size: 14px; color: var(--gray-700); }
+    .requirement-item:last-child { border-bottom: none; }
+    .req-check { color: var(--gold); font-weight: 700; }
+    .deadline-badge {
+      background: rgba(11,31,75,0.06); border: 1px solid rgba(11,31,75,0.12);
+      border-radius: 10px; padding: 16px; margin-top: 14px;
+    }
+    .deadline-date { font-family: var(--font-display); font-size: 22px; font-weight: 700; color: var(--navy); }
+    .deadline-label { font-size: 12px; color: var(--gray-500); }
+    .fee-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--gray-100); font-size: 14px; }
+    .fee-item:last-child { border-bottom: none; }
+    .fee-total { display: flex; justify-content: space-between; padding: 14px 0 0; font-weight: 700; font-size: 15px; color: var(--navy); }
+  </style>
+</head>
+<body>
+
+<nav class="portal-nav">
+  <a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\home.html" class="brand">
+    <div class="brand-icon">U</div>
+    <div class="brand-text">UMIS <span>Portal</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\home.html">Home</a></li>
+    <li><a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\help.html">About Us</a></li>
+    <li><a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\Addmission.html" class="active">Admission</a></li>
+  </ul>
+</nav>
+
+<div style="background:var(--navy);padding:44px 40px;color:white;position:relative;overflow:hidden;">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 80% 50%,rgba(201,168,68,0.12),transparent 60%);"></div>
+  <div style="position:relative;max-width:1100px;margin:0 auto;">
+    <div class="breadcrumb"><a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\home.html">Home</a> › <span>Admission</span></div>
+    <h1 style="font-family:var(--font-display);font-size:40px;font-weight:700;color:white;margin-top:8px;">Apply for <span style="color:var(--gold)">Admission</span></h1>
+    <p style="color:rgba(255,255,255,0.7);margin-top:8px;">Complete the form below to begin your application for the 2026/2027 academic year.</p>
+  </div>
+</div>
+
+<div class="page-layout">
+  <!-- FORM -->
+  <div class="form-card fade-in">
+    <div class="form-card-header">
+      <h2>Admission Application Form</h2>
+      <p>Please fill all required fields marked with *</p>
+    </div>
+
+    <div id="alert" class="alert" style="margin:20px 36px 0;"></div>
+
+    <form id="admissionForm">
+      <div class="form-section">
+        <div class="form-section-title">👤 Applicant Details</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>First Name *</label>
+            <input type="text" name="firstName" placeholder="e.g. Aisha" required />
+          </div>
+          <div class="form-group">
+            <label>Last Name *</label>
+            <input type="text" name="lastName" placeholder="e.g. Mohammed" required />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Date of Birth *</label>
+            <input type="date" name="dateOfBirth" required />
+          </div>
+          <div class="form-group">
+            <label>Gender *</label>
+            <select name="gender" required>
+              <option value="">Select gender</option>
+              <option>Male</option><option>Female</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nationality *</label>
+            <input type="text" name="nationality" placeholder="e.g. Nigerian" required />
+          </div>
+          <div class="form-group">
+            <label>State of Origin</label>
+            <input type="text" name="stateOfOrigin" placeholder="e.g. Lagos" />
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">📞 Contact Information</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Email Address *</label>
+            <input type="email" name="email" placeholder="applicant@email.com" required />
+          </div>
+          <div class="form-group">
+            <label>Phone Number *</label>
+            <input type="tel" name="phone" placeholder="+234 800 000 0000" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Residential Address</label>
+          <textarea name="address" placeholder="Full home address"></textarea>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">🎓 Programme Details</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Desired Faculty *</label>
+            <select name="desiredFaculty" required>
+              <option value="">Select faculty</option>
+              <option>Science & Technology</option>
+              <option>Engineering</option>
+              <option>Arts & Humanities</option>
+              <option>Business Administration</option>
+              <option>Social Sciences</option>
+              <option>Medicine & Health Sciences</option>
+              <option>Law</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Desired Department *</label>
+            <input type="text" name="desiredDepartment" placeholder="e.g. Computer Science" required />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Programme Type *</label>
+            <select name="programmeType" required>
+              <option>Full-Time</option>
+              <option>Part-Time</option>
+              <option>Distance Learning</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Entry Mode *</label>
+            <select name="entryMode" required>
+              <option>100 Level (UTME)</option>
+              <option>200 Level (Direct Entry)</option>
+              <option>Postgraduate</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Second Choice Department</label>
+          <input type="text" name="secondChoice" placeholder="e.g. Information Technology" />
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">📜 Previous Education</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Previous School *</label>
+            <input type="text" name="previousSchool" placeholder="Name of last school attended" required />
+          </div>
+          <div class="form-group">
+            <label>Year of Graduation</label>
+            <select name="graduationYear">
+              <option value="">Select year</option>
+              <option>2026</option><option>2025</option><option>2024</option>
+              <option>2023</option><option>2022</option><option>2021</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>WAEC/NECO Score</label>
+            <input type="text" name="waecScore" placeholder="e.g. 7 A1s" />
+          </div>
+          <div class="form-group">
+            <label>JAMB Score</label>
+            <input type="number" name="jambScore" placeholder="e.g. 285" min="0" max="400" />
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\payment.html" class="btn btn-outline">Pay Fees First</a>
+        <button type="submit" class="btn btn-gold btn-lg" id="submitBtn">
+          <span id="btnText">Submit Application →</span>
+          <div class="spinner" id="spinner"></div>
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div>
+    <div class="info-card fade-in-1">
+      <h4>📋 Requirements Checklist</h4>
+      <div class="requirement-item"><span class="req-check">✓</span> Valid National ID / Passport</div>
+      <div class="requirement-item"><span class="req-check">✓</span> WAEC/NECO Result (5 Credits)</div>
+      <div class="requirement-item"><span class="req-check">✓</span> JAMB Score (200+)</div>
+      <div class="requirement-item"><span class="req-check">✓</span> Birth Certificate</div>
+      <div class="requirement-item"><span class="req-check">✓</span> Passport Photograph</div>
+      <div class="requirement-item"><span class="req-check">✓</span> Admission Form Fee Payment</div>
+      <div class="deadline-badge">
+        <div class="deadline-label">Application Deadline</div>
+        <div class="deadline-date">July 31, 2026</div>
+        <div class="deadline-label" style="margin-top:4px;">Academic Year 2026/2027</div>
+      </div>
+    </div>
+
+    <div class="info-card fade-in-2">
+      <h4>💰 Fee Schedule</h4>
+      <div class="fee-item"><span>Application Form Fee</span><span style="font-weight:700;color:var(--navy)">₦15,000</span></div>
+      <div class="fee-item"><span>Acceptance Fee</span><span style="font-weight:700;color:var(--navy)">₦50,000</span></div>
+      <div class="fee-item"><span>Processing Fee</span><span style="font-weight:700;color:var(--navy)">₦5,000</span></div>
+      <div class="fee-total"><span>Total (First Payment)</span><span>₦70,000</span></div>
+      <a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\payment.html" class="btn btn-primary btn-full" style="margin-top:18px;">Proceed to Payment →</a>
+    </div>
+
+    <div class="info-card fade-in-3">
+      <h4>📞 Need Help?</h4>
+      <p style="font-size:14px;color:var(--gray-500);line-height:1.65;">Contact the Admissions Office for assistance with your application.</p>
+      <p style="font-size:14px;margin-top:12px;"><strong style="color:var(--navy)">📧</strong> admissions@university.edu</p>
+      <p style="font-size:14px;margin-top:6px;"><strong style="color:var(--navy)">📞</strong> +234 800 123 4567</p>
+      <a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\help.html" class="btn btn-outline btn-full" style="margin-top:16px;">Visit Support Center</a>
+    </div>
+  </div>
+</div>
+
+<footer class="portal-footer">
+  <p>© 2026 <strong>UMIS</strong> — University Management Information System</p>
+</footer>
+
+<script>
+  const API = 'http://localhost:3000/api';
+  document.getElementById('admissionForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(this));
+    const alertEl = document.getElementById('alert');
+    document.getElementById('btnText').textContent = 'Submitting...';
+    document.getElementById('spinner').style.display = 'block';
+    document.getElementById('submitBtn').disabled = true;
+    try {
+      const res = await fetch(`${API}/admissions`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      const result = await res.json();
+      if (res.ok) {
+        alertEl.className = 'alert alert-success show';
+        alertEl.innerHTML = `✅ <strong>Application submitted successfully!</strong> Your application ID is <strong>${result.admission?._id || 'APP-' + Date.now()}</strong>. You will receive a confirmation email shortly.`;
+        this.reset();
+      } else {
+        alertEl.className = 'alert alert-danger show';
+        alertEl.textContent = '❌ ' + (result.message || 'Submission failed. Please try again.');
+      }
+    } catch {
+      alertEl.className = 'alert alert-danger show';
+      alertEl.innerHTML = '⚠️ Cannot connect to backend server. Please ensure it is running.';
+    } finally {
+      document.getElementById('btnText').textContent = 'Submit Application →';
+      document.getElementById('spinner').style.display = 'none';
+      document.getElementById('submitBtn').disabled = false;
+    }
+  });
+</script>
+</body>
+</html>

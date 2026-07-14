@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Portal — UMIS</title>
+  <link rel="stylesheet" href="page1.css" />
+  <style>
+    .top-banner {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+      border-radius: var(--radius-md); padding: 24px 28px; margin-bottom: 26px;
+      color: white; display: flex; align-items: center; justify-content: space-between;
+    }
+    .banner-greeting { font-family: var(--font-display); font-size: 22px; font-weight: 700; }
+    .banner-sub { font-size: 13px; color: rgba(255,255,255,.6); margin-top: 4px; }
+    .banner-gpa { text-align: right; }
+    .gpa-val { font-size: 36px; font-weight: 800; color: var(--gold); line-height: 1; }
+    .gpa-label { font-size: 11px; color: rgba(255,255,255,.5); letter-spacing: 1px; text-transform: uppercase; }
+
+    .page-grid { display: grid; grid-template-columns: 1fr 300px; gap: 24px; }
+
+    .available-course-card {
+      border: 1.5px solid var(--gray-200); border-radius: var(--radius-md);
+      padding: 16px; transition: var(--transition); background: #fff;
+      display: flex; gap: 14px; align-items: flex-start; margin-bottom: 12px;
+    }
+    .available-course-card:hover { border-color: var(--navy); box-shadow: var(--shadow-sm); }
+    .available-course-card.enrolled { border-color: var(--green); background: var(--green-pale); }
+    .acc-icon {
+      width: 46px; height: 46px; border-radius: 10px; font-size: 22px;
+      background: var(--navy); color: white; display: flex;
+      align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .available-course-card.enrolled .acc-icon { background: var(--green); }
+    .acc-code { font-size: 11px; font-weight: 700; letter-spacing: 1px; color: var(--gold); text-transform: uppercase; }
+    .acc-name { font-size: 15px; font-weight: 700; color: var(--navy); margin: 2px 0; font-family: var(--font-display); }
+    .acc-meta { font-size: 12px; color: var(--gray-500); }
+    .acc-actions { margin-left: auto; flex-shrink: 0; }
+
+    .my-course-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px 14px; border-radius: var(--radius-sm);
+      background: var(--gray-50); margin-bottom: 8px;
+      border: 1px solid var(--gray-200); transition: var(--transition);
+    }
+    .my-course-item:hover { background: white; border-color: var(--navy); }
+    .my-course-badge { font-size: 11px; font-weight: 700; color: var(--gold); letter-spacing: .8px; }
+    .my-course-name { font-size: 13px; font-weight: 600; color: var(--navy); }
+    .my-course-time { font-size: 11.5px; color: var(--gray-500); }
+  </style>
+</head>
+<body>
+<div class="layout">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-text">UMIS <span>Portal</span></div>
+      <div class="brand-sub">Student Portal</div>
+    </div>
+    <div class="sidebar-user">
+      <div class="user-avatar">CN</div>
+      <div>
+        <div class="user-name">Chioma Nwachukwu</div>
+        <div class="user-role">400L · Computer Science</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">Main</div>
+      <a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\Academic_page.html" class="active"><span class="icon">🏠</span> Dashboard</a>
+      <a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\courses.html"><span class="icon">📚</span> My Courses</a>
+      <a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\results.html"><span class="icon">📊</span> My Results</a>
+      <a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\timetable.html"><span class="icon">📅</span> My Timetable</a>
+      <a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\studnet_assignment.html"><span class="icon">📋</span> Assignments</a>
+      <a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\registration.html"><span class="icon">📝</span> Registration</a>
+
+      <div class="nav-section-title">Finance</div>
+      <a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\payment.html"><span class="icon">💳</span> Pay Fees</a>
+      <a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\payment_history.html"><span class="icon">🧾</span> Payment History</a>
+      <div class="nav-section-title">Resources</div>
+      <a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\library.html"><span class="icon">🏛️</span> E-Library</a>
+      <div class="nav-section-title">Account</div>
+      <a href="#"><span class="icon">👤</span> My Profile</a>
+      <a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\home.html"><span class="icon">🚪</span> Logout</a>
+    </nav>
+    <div class="sidebar-footer">© 2026 UMIS Portal</div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main-content">
+    <div class="main-topbar">
+      <div class="topbar-title">Student Portal</div>
+      <div class="topbar-right">
+        <button class="notification-btn">🔔</button>
+        <span class="badge badge-gold">2025/2026 Sem 2</span>
+        <div class="user-avatar" style="width:34px;height:34px;font-size:12px;">CN</div>
+      </div>
+    </div>
+
+    <div class="content-area">
+      <!-- BANNER -->
+      <div class="top-banner">
+        <div>
+          <div class="banner-greeting">Welcome back, Chioma 👋</div>
+          <div class="banner-sub">Computer Science · 400 Level · Matric: CSC/2022/040</div>
+          <div style="margin-top:14px;display:flex;gap:10px;">
+            <a href="student_timetable.html" class="btn btn-gold btn-sm">📅 View Timetable</a>
+            <a href="student_assignments.html" class="btn btn-sm" style="border:1.5px solid rgba(255,255,255,.3);color:white;background:transparent;">📋 My Assignments</a>
+          </div>
+        </div>
+        <div class="banner-gpa">
+          <div class="gpa-val">4.5</div>
+          <div class="gpa-label">Current GPA</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:4px;"><span id="enrolledCount">0</span> courses registered</div>
+        </div>
+      </div>
+
+      <div class="page-grid">
+        <!-- AVAILABLE COURSES (LEFT) -->
+        <div>
+          <!-- Tabs -->
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+            <div class="pill-tabs" id="courseTabs">
+              <button class="pill-tab active" onclick="switchTab('available', this)">Available Courses</button>
+              <button class="pill-tab" onclick="switchTab('enrolled', this)">My Courses</button>
+            </div>
+            <div class="search-bar" style="width:220px;">
+              <span>🔍</span>
+              <input type="text" placeholder="Search…" id="courseSearch" oninput="renderCourseList()">
+            </div>
+          </div>
+
+          <div id="availablePanel">
+            <div id="noCourses" style="display:none;" class="empty-state">
+              <div class="empty-icon">📭</div>
+              <div class="empty-title">No courses available yet</div>
+              <div class="empty-desc">Your lecturer hasn't published courses for this semester yet.</div>
+            </div>
+            <div id="courseListContainer"></div>
+          </div>
+
+          <div id="enrolledPanel" style="display:none;">
+            <div id="enrolledList"></div>
+          </div>
+        </div>
+
+        <!-- RIGHT SIDEBAR -->
+        <div>
+          <div class="card" style="margin-bottom:16px;">
+            <div class="card-header"><div class="card-title" style="font-size:15px;">Quick Links</div></div>
+            <a href="student_timetable.html" class="quick-action" style="display:flex;align-items:center;gap:10px;padding:11px 12px;border:1px solid var(--gray-200);border-radius:var(--radius-sm);text-decoration:none;color:var(--gray-700);margin-bottom:7px;transition:var(--transition);">
+              <span style="font-size:18px;">📅</span><span style="font-size:13px;font-weight:600;">My Timetable</span>
+            </a>
+            <a href="student_assignments.html" class="quick-action" style="display:flex;align-items:center;gap:10px;padding:11px 12px;border:1px solid var(--gray-200);border-radius:var(--radius-sm);text-decoration:none;color:var(--gray-700);margin-bottom:7px;transition:var(--transition);">
+              <span style="font-size:18px;">📋</span><span style="font-size:13px;font-weight:600;">Assignments</span>
+            </a>
+            <a href="library.html" class="quick-action" style="display:flex;align-items:center;gap:10px;padding:11px 12px;border:1px solid var(--gray-200);border-radius:var(--radius-sm);text-decoration:none;color:var(--gray-700);margin-bottom:7px;transition:var(--transition);">
+              <span style="font-size:18px;">🏛️</span><span style="font-size:13px;font-weight:600;">E-Library</span>
+            </a>
+          </div>
+
+          <div class="card">
+            <div class="card-header"><div class="card-title" style="font-size:15px;">Registration Status</div></div>
+            <div id="regStatus">
+              <div style="text-align:center;padding:20px 0;">
+                <div style="font-size:36px;margin-bottom:8px;">📋</div>
+                <div style="font-size:13px;color:var(--gray-500);">Register courses to begin</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- Confirm Drop Modal -->
+<div class="modal-overlay" id="dropModal">
+  <div class="modal" style="max-width:420px;">
+    <div class="modal-header">
+      <div class="modal-title">Drop Course?</div>
+      <button class="modal-close" onclick="closeDropModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="color:var(--gray-600);font-size:14px;">Are you sure you want to drop <strong id="dropCourseName"></strong>? This will remove you from the course roster.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeDropModal()">Cancel</button>
+      <button class="btn btn-danger" onclick="confirmDrop()">Drop Course</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const STUDENT = { name: 'Chioma Nwachukwu', matric: 'CSC/2022/040', level: '400L' };
+let currentTab = 'available';
+let dropTarget = null;
+
+const COURSE_CATALOG = {
+  'CSC 101': { name:'Introduction to Computing',       icon:'💻', days:'Mon/Wed',     time:'08:00', venue:'LT1'     },
+  'CSC 201': { name:'Introduction to Programming',     icon:'💻', days:'Mon/Wed',     time:'10:00', venue:'Room 201'},
+  'CSC 301': { name:'Data Structures & Algorithms',    icon:'🔣', days:'Tue/Thu',     time:'08:00', venue:'LT2'    },
+  'CSC 401': { name:'Artificial Intelligence',         icon:'🤖', days:'Mon/Wed/Fri', time:'08:00', venue:'Hall B' },
+  'CSC 403': { name:'Database Systems',                icon:'🗄️', days:'Tue/Thu',     time:'10:00', venue:'ICT Lab 3'},
+  'CSC 405': { name:'Software Engineering',            icon:'⚙️', days:'Wed/Fri',     time:'12:00', venue:'LT3'    },
+  'CSC 407': { name:'Computer Networks',               icon:'🌐', days:'Mon/Thu',     time:'14:00', venue:'LT4'    },
+  'CSC 409': { name:'Operating Systems',               icon:'🖥️', days:'Tue/Fri',     time:'09:00', venue:'LT2'    },
+  'MTH 301': { name:'Numerical Methods',               icon:'📐', days:'Mon/Wed',     time:'11:00', venue:'Room 104'},
+  'STA 201': { name:'Probability & Statistics',        icon:'📊', days:'Tue/Thu',     time:'13:00', venue:'Room 205'},
+};
+
+function getAvailableCourses() {
+  try { return JSON.parse(localStorage.getItem('lecturerCourses') || '[]'); } catch{ return []; }
+}
+function getEnrollments() {
+  try { return JSON.parse(localStorage.getItem('studentEnrollments') || '{}'); } catch{ return {}; }
+}
+function saveEnrollments(data) {
+  localStorage.setItem('studentEnrollments', JSON.stringify(data));
+}
+function getMyEnrolled() {
+  const all = getEnrollments();
+  return Object.keys(all).filter(code => (all[code]||[]).some(s => s.matric === STUDENT.matric));
+}
+
+function switchTab(tab, btn) {
+  currentTab = tab;
+  document.querySelectorAll('.pill-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('availablePanel').style.display = tab === 'available' ? '' : 'none';
+  document.getElementById('enrolledPanel').style.display = tab === 'enrolled' ? '' : 'none';
+  renderCourseList();
+}
+
+function renderCourseList() {
+  const q = document.getElementById('courseSearch').value.toLowerCase();
+  const available = getAvailableCourses();
+  const myEnrolled = getMyEnrolled();
+  document.getElementById('enrolledCount').textContent = myEnrolled.length;
+
+  if (currentTab === 'available') {
+    const noCourses = document.getElementById('noCourses');
+    const container = document.getElementById('courseListContainer');
+    const filtered = available.filter(code => {
+      const c = COURSE_CATALOG[code];
+      return !q || code.toLowerCase().includes(q) || c?.name.toLowerCase().includes(q);
+    });
+    if (filtered.length === 0) {
+      noCourses.style.display = '';
+      container.innerHTML = '';
+    } else {
+      noCourses.style.display = 'none';
+      container.innerHTML = filtered.map(code => {
+        const c = COURSE_CATALOG[code];
+        if (!c) return '';
+        const enrolled = myEnrolled.includes(code);
+        return `<div class="available-course-card ${enrolled?'enrolled':''}">
+          <div class="acc-icon">${c.icon}</div>
+          <div style="flex:1;">
+            <div class="acc-code">${code}</div>
+            <div class="acc-name">${c.name}</div>
+            <div class="acc-meta">${c.days} · ${c.time} · ${c.venue}</div>
+          </div>
+          <div class="acc-actions">
+            ${enrolled
+              ? `<button class="btn btn-sm btn-ghost" style="color:var(--red);border-color:var(--red);" onclick="openDropModal('${code}')">✕ Drop</button>`
+              : `<button class="btn btn-sm btn-gold" onclick="registerCourse('${code}')">+ Register</button>`
+            }
+          </div>
+        </div>`;
+      }).join('');
+    }
+  } else {
+    // enrolled panel
+    const enrolledList = document.getElementById('enrolledList');
+    if (myEnrolled.length === 0) {
+      enrolledList.innerHTML = `<div class="empty-state"><div class="empty-icon">📚</div><div class="empty-title">No courses registered</div><div class="empty-desc">Go to "Available Courses" to register.</div></div>`;
+    } else {
+      enrolledList.innerHTML = myEnrolled.map(code => {
+        const c = COURSE_CATALOG[code];
+        if (!c) return '';
+        return `<div class="my-course-item">
+          <div style="font-size:22px;">${c.icon}</div>
+          <div style="flex:1;">
+            <div class="my-course-badge">${code}</div>
+            <div class="my-course-name">${c.name}</div>
+            <div class="my-course-time">${c.days} · ${c.time} · ${c.venue}</div>
+          </div>
+          <button class="btn btn-sm btn-ghost" style="color:var(--red);" onclick="openDropModal('${code}')">✕</button>
+        </div>`;
+      }).join('');
+    }
+  }
+
+  renderRegStatus(myEnrolled);
+}
+
+function registerCourse(code) {
+  const all = getEnrollments();
+  if (!all[code]) all[code] = [];
+  if (all[code].some(s => s.matric === STUDENT.matric)) { showToast('Already registered!', 'warn'); return; }
+  all[code].push({ ...STUDENT, date: new Date().toLocaleDateString('en-GB', {day:'2-digit',month:'short',year:'numeric'}) });
+  saveEnrollments(all);
+  showToast(`✅ Registered for ${code}`, 'success');
+  renderCourseList();
+}
+
+function openDropModal(code) {
+  dropTarget = code;
+  document.getElementById('dropCourseName').textContent = `${code} – ${COURSE_CATALOG[code]?.name}`;
+  document.getElementById('dropModal').classList.add('open');
+}
+function closeDropModal() { document.getElementById('dropModal').classList.remove('open'); }
+function confirmDrop() {
+  if (!dropTarget) return;
+  const all = getEnrollments();
+  if (all[dropTarget]) {
+    all[dropTarget] = all[dropTarget].filter(s => s.matric !== STUDENT.matric);
+    saveEnrollments(all);
+  }
+  closeDropModal();
+  showToast(`Dropped ${dropTarget}`, 'warn');
+  renderCourseList();
+  dropTarget = null;
+}
+
+function renderRegStatus(enrolled) {
+  const max = 6;
+  const count = enrolled.length;
+  const pct = Math.round((count/max)*100);
+  document.getElementById('regStatus').innerHTML = `
+    <div style="margin-bottom:12px;">
+      <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--gray-500);margin-bottom:6px;">
+        <span>Courses Registered</span><span>${count}/${max}</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill ${count>=max?'green':''}" style="width:${pct}%"></div></div>
+    </div>
+    ${enrolled.slice(0,4).map(code => `<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--gray-100);">
+      <span style="font-size:14px;">${COURSE_CATALOG[code]?.icon||'📚'}</span>
+      <div><div style="font-size:12px;font-weight:700;color:var(--gold);">${code}</div>
+        <div style="font-size:11.5px;color:var(--gray-600);">${COURSE_CATALOG[code]?.name}</div>
+      </div>
+      <span class="badge badge-success" style="margin-left:auto;">✓</span>
+    </div>`).join('')}
+    ${count>4?`<div style="font-size:12px;color:var(--gray-500);text-align:center;padding-top:8px;">+${count-4} more</div>`:''}
+  `;
+}
+
+function showToast(msg, type='') {
+  const t = document.createElement('div');
+  t.className = `toast ${type?'toast-'+type:''}`;
+  t.textContent = msg;
+  document.getElementById('toastContainer').appendChild(t);
+  setTimeout(() => t.remove(), 3500);
+}
+
+renderCourseList();
+setInterval(renderCourseList, 5000);
+</script>
+</body>
+</html>

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lecturer Registration — UMIS Portal</title>
+  <link rel="stylesheet" href="page.css" />
+  <style>
+    body { background: var(--cream); }
+    .page-wrap { max-width: 780px; margin: 52px auto; padding: 0 24px 52px; }
+    .form-card { background: white; border-radius: 18px; box-shadow: var(--shadow-lg); overflow: hidden; }
+    .form-card-header {
+      background: linear-gradient(135deg, var(--navy), var(--navy-light));
+      padding: 36px 40px;
+    }
+    .form-card-header .badge-role {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(201,168,68,0.2); border: 1px solid rgba(201,168,68,0.4);
+      color: var(--gold); font-size: 12px; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; border-radius: 20px; padding: 5px 12px; margin-bottom: 14px;
+    }
+    .form-card-header h2 {
+      font-family: var(--font-display); font-size: 32px; font-weight: 700;
+      color: white; line-height: 1.2;
+    }
+    .form-card-header p { font-size: 14px; color: rgba(255,255,255,0.65); margin-top: 6px; }
+    .form-section { padding: 28px 40px; border-bottom: 1px solid var(--gray-100); }
+    .form-section:last-of-type { border-bottom: none; }
+    .form-section-title {
+      font-size: 11px; font-weight: 800; letter-spacing: 1.8px; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 20px;
+    }
+    .form-actions { padding: 26px 40px; background: var(--gray-50); display: flex; justify-content: flex-end; gap: 12px; }
+  </style>
+</head>
+<body>
+
+<nav class="portal-nav">
+  <a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\home.html" class="brand">
+    <div class="brand-icon">U</div>
+    <div class="brand-text">UMIS <span>Portal</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\home.html">Home</a></li>
+    <li><a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\Lecturer_page.html">Dashboard</a></li>
+    <li><a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\help.html">Support</a></li>
+  </ul>
+</nav>
+
+<div class="page-wrap">
+  <div style="margin-bottom:24px;">
+    <div class="breadcrumb"><a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\home.html">Home</a> › <span>Lecturer Registration</span></div>
+  </div>
+
+  <div class="form-card fade-in">
+    <div class="form-card-header">
+      <div class="badge-role">🏫 Staff Portal</div>
+      <h2>Lecturer Registration</h2>
+      <p>Create your UMIS staff account to access the lecturer portal and manage your courses.</p>
+    </div>
+
+    <div id="alert" class="alert" style="margin:20px 40px 0;"></div>
+
+    <form id="lecturerForm">
+      <div class="form-section">
+        <div class="form-section-title">👤 Personal Details</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>First Name *</label>
+            <input type="text" name="firstName" placeholder="e.g. Adewale" required />
+          </div>
+          <div class="form-group">
+            <label>Last Name *</label>
+            <input type="text" name="lastName" placeholder="e.g. Bello" required />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Title *</label>
+            <select name="title" required>
+              <option value="">Select title</option>
+              <option>Dr.</option>
+              <option>Prof.</option>
+              <option>Mr.</option>
+              <option>Mrs.</option>
+              <option>Ms.</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Gender</label>
+            <select name="gender">
+              <option value="">Select gender</option>
+              <option>Male</option>
+              <option>Female</option>
+              <option>Prefer not to say</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">📞 Contact Information</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Official Email *</label>
+            <input type="email" name="email" placeholder="lecturer@university.edu" required />
+          </div>
+          <div class="form-group">
+            <label>Phone Number *</label>
+            <input type="tel" name="phone" placeholder="+234 800 000 0000" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Office Location</label>
+          <input type="text" name="officeLocation" placeholder="e.g. Building A, Room 204" />
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">🏫 Academic Profile</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Faculty *</label>
+            <select name="faculty" required>
+              <option value="">Select faculty</option>
+              <option>Science & Technology</option>
+              <option>Engineering</option>
+              <option>Arts & Humanities</option>
+              <option>Business Administration</option>
+              <option>Social Sciences</option>
+              <option>Medicine & Health Sciences</option>
+              <option>Law</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Department *</label>
+            <input type="text" name="department" placeholder="e.g. Computer Science" required />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Academic Rank *</label>
+            <select name="rank" required>
+              <option value="">Select rank</option>
+              <option>Professor</option>
+              <option>Associate Professor</option>
+              <option>Senior Lecturer</option>
+              <option>Lecturer I</option>
+              <option>Lecturer II</option>
+              <option>Assistant Lecturer</option>
+              <option>Graduate Assistant</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Specialisation</label>
+            <input type="text" name="specialisation" placeholder="e.g. Machine Learning, AI" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Courses Teaching (comma-separated)</label>
+          <input type="text" name="courses" placeholder="e.g. CSC401, CSC403, CSC405" />
+        </div>
+        <div class="form-group">
+          <label>Brief Bio</label>
+          <textarea name="bio" placeholder="A short professional biography..."></textarea>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">🔑 Account Security</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Password *</label>
+            <input type="password" name="password" placeholder="Minimum 8 characters" required minlength="8" />
+          </div>
+          <div class="form-group">
+            <label>Confirm Password *</label>
+            <input type="password" name="confirmPassword" placeholder="Re-enter password" required />
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\home.html" class="btn btn-outline">Cancel</a>
+        <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">
+          <span id="btnText">Register Staff Account</span>
+          <div class="spinner" id="spinner"></div>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<footer class="portal-footer">
+  <p>© 2026 <strong>UMIS</strong> — University Management Information System</p>
+</footer>
+
+<script>
+  const API = 'http://localhost:3000/api';
+  document.getElementById('lecturerForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(this));
+    const alertEl = document.getElementById('alert');
+    if (data.password !== data.confirmPassword) {
+      alertEl.className = 'alert alert-danger show';
+      alertEl.textContent = '❌ Passwords do not match.';
+      return;
+    }
+    delete data.confirmPassword;
+    if (data.courses) data.courses = data.courses.split(',').map(c => c.trim());
+    document.getElementById('btnText').textContent = 'Registering...';
+    document.getElementById('spinner').style.display = 'block';
+    document.getElementById('submitBtn').disabled = true;
+    try {
+      const res = await fetch(`${API}/lecturers`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      const result = await res.json();
+      if (res.ok) {
+        alertEl.className = 'alert alert-success show';
+        alertEl.innerHTML = `✅ <strong>Registration successful!</strong> Redirecting to your dashboard...`;
+        setTimeout(() => window.location.href = 'lecturer-dashboard.html', 2500);
+      } else {
+        alertEl.className = 'alert alert-danger show';
+        alertEl.textContent = '❌ ' + (result.message || 'Registration failed.');
+      }
+    } catch {
+      alertEl.className = 'alert alert-danger show';
+      alertEl.innerHTML = '⚠️ Cannot connect to backend. Please start the server first.';
+    } finally {
+      document.getElementById('btnText').textContent = 'Register Staff Account';
+      document.getElementById('spinner').style.display = 'none';
+      document.getElementById('submitBtn').disabled = false;
+    }
+  });
+</script>
+</body>
+</html>

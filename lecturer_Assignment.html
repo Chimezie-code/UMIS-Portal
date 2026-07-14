@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Assignments — UMIS Portal</title>
+  <link rel="stylesheet" href="page1.css" />
+  <style>
+    .page-grid { display: grid; grid-template-columns: 420px 1fr; gap: 24px; }
+
+    .assignment-card {
+      border: 1.5px solid var(--gray-200); border-radius: var(--radius-md);
+      padding: 18px; margin-bottom: 12px; background: white;
+      transition: var(--transition); position: relative; overflow: hidden;
+    }
+    .assignment-card::before {
+      content:''; position:absolute; left:0; top:0; bottom:0;
+      width:4px; background: var(--navy); border-radius: 4px 0 0 4px;
+    }
+    .assignment-card.urgent::before { background: var(--red); }
+    .assignment-card.closed::before { background: var(--gray-300); }
+    .assignment-card:hover { box-shadow: var(--shadow-sm); border-color: var(--navy); }
+
+    .ac-title { font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+    .ac-meta { font-size: 12px; color: var(--gray-500); margin-bottom: 10px; }
+    .ac-desc { font-size: 13.5px; color: var(--gray-700); line-height: 1.6; margin-bottom: 12px; }
+    .ac-footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+    .ac-stats { display: flex; gap: 12px; }
+    .ac-stat { font-size: 12px; color: var(--gray-500); display: flex; align-items: center; gap: 4px; }
+
+    .due-chip {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 4px 10px; border-radius: 99px; font-size: 11.5px; font-weight: 700;
+    }
+    .due-chip.open { background: var(--green-pale); color: var(--green); }
+    .due-chip.urgent { background: var(--red-pale); color: var(--red); }
+    .due-chip.closed { background: var(--gray-100); color: var(--gray-500); }
+
+    .filter-bar { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
+    .filter-btn {
+      padding: 6px 14px; border-radius: 99px; border: 1.5px solid var(--gray-200);
+      background: white; font-family: var(--font-body); font-size: 12.5px;
+      font-weight: 600; color: var(--gray-600); cursor: pointer; transition: var(--transition);
+    }
+    .filter-btn:hover { border-color: var(--navy); color: var(--navy); }
+    .filter-btn.active { background: var(--navy); color: white; border-color: var(--navy); }
+
+    .attach-preview {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 12px; background: var(--gray-50); border-radius: var(--radius-xs);
+      border: 1px solid var(--gray-200); margin-top: 8px; font-size: 12.5px;
+    }
+  </style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-text">UMIS <span>Portal</span></div>
+      <div class="brand-sub">Staff Dashboard</div>
+    </div>
+    <div class="sidebar-user">
+      <div class="user-avatar">AB</div>
+      <div>
+        <div class="user-name">Dr. Adewale Bello</div>
+        <div class="user-role">Senior Lecturer · Comp. Science</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">Main</div>
+      <a href="Lecturer_page.html"><span class="icon">🏠</span> Dashboard</a>
+      <a href="Lecturer_page.html#courses"><span class="icon">📚</span> My Courses</a>
+      <a href="Lecturer_page.html#students"><span class="icon">👥</span> My Students</a>
+      <a href="assignments.html" class="active"><span class="icon">📋</span> Assignments</a>
+      <div class="nav-section-title">Resources</div>
+      <a href="library.html"><span class="icon">🏛️</span> E-Library</a>
+      <a href="upload_material.html"><span class="icon">📤</span> Upload Material</a>
+      <div class="nav-section-title">Account</div>
+      <a href="#"><span class="icon">👤</span> My Profile</a>
+      <a href="home.html"><span class="icon">🚪</span> Logout</a>
+    </nav>
+    <div class="sidebar-footer">© 2026 UMIS Portal</div>
+  </aside>
+
+  <div class="main-content">
+    <div class="main-topbar">
+      <div class="topbar-title">Assignments</div>
+      <div class="topbar-right">
+        <button class="notification-btn">🔔</button>
+        <span class="badge badge-gold">2025/2026 Sem 2</span>
+      </div>
+    </div>
+
+    <div class="content-area">
+      <div class="page-grid">
+        <!-- LEFT: CREATE ASSIGNMENT FORM -->
+        <div>
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Post New Assignment</div>
+              <span class="badge badge-navy" id="editBadge" style="display:none;">Editing</span>
+            </div>
+
+            <input type="hidden" id="editId">
+
+            <div class="form-group">
+              <label class="form-label">Course *</label>
+              <select class="form-control" id="asgCourse">
+                <option value="">— Select course —</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Assignment Title *</label>
+              <input type="text" class="form-control" id="asgTitle" placeholder="e.g. Assignment 1: Search Algorithms">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Description / Instructions *</label>
+              <textarea class="form-control" id="asgDesc" rows="5" placeholder="Describe the assignment clearly — topic, requirements, expected output, submission format…"></textarea>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+              <div class="form-group">
+                <label class="form-label">Due Date *</label>
+                <input type="date" class="form-control" id="asgDue">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Max Marks</label>
+                <input type="number" class="form-control" id="asgMarks" placeholder="100" min="1" max="100">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Submission Type</label>
+              <select class="form-control" id="asgSubType">
+                <option value="File Upload">📁 File Upload (PDF, DOCX)</option>
+                <option value="Online Text">📝 Online Text Submission</option>
+                <option value="Both">📋 File + Text</option>
+              </select>
+            </div>
+
+            <!-- Attach file -->
+            <div class="form-group">
+              <label class="form-label">Attach File (optional)</label>
+              <div class="drop-zone" style="padding:20px;" onclick="document.getElementById('asgFile').click()" ondragover="event.preventDefault()" ondrop="handleDrop(event)">
+                <div style="font-size:28px;margin-bottom:6px;">📎</div>
+                <div style="font-size:13px;color:var(--gray-500);" id="asgFileLabel">Click to attach a file</div>
+                <input type="file" id="asgFile" style="display:none;" onchange="previewAsgFile(this)">
+              </div>
+              <div id="attachPreview" style="display:none;" class="attach-preview">
+                <span style="font-size:18px;">📄</span>
+                <span id="attachName" style="flex:1;"></span>
+                <button class="btn btn-ghost btn-sm" onclick="clearAttach()">✕</button>
+              </div>
+            </div>
+
+            <div style="display:flex;gap:10px;">
+              <button class="btn btn-gold" style="flex:1;" onclick="postAssignment()">📤 Post Assignment</button>
+              <button class="btn btn-ghost" id="cancelEdit" style="display:none;" onclick="cancelEdit()">Cancel</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: ASSIGNMENT LIST -->
+        <div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+            <div style="font-family:var(--font-display);font-size:17px;font-weight:700;color:var(--navy);">Posted Assignments</div>
+            <div style="display:flex;gap:8px;">
+              <div class="search-bar" style="width:200px;">
+                <span>🔍</span>
+                <input type="text" placeholder="Search…" id="asgSearch" oninput="renderAssignments()">
+              </div>
+            </div>
+          </div>
+          <div class="filter-bar">
+            <button class="filter-btn active" data-filter="all" onclick="setFilter(this,'all')">All</button>
+            <button class="filter-btn" data-filter="open" onclick="setFilter(this,'open')">Open</button>
+            <button class="filter-btn" data-filter="closed" onclick="setFilter(this,'closed')">Closed</button>
+          </div>
+          <div id="assignmentsList"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DELETE CONFIRM MODAL -->
+<div class="modal-overlay" id="deleteModal">
+  <div class="modal" style="max-width:400px;">
+    <div class="modal-header">
+      <div class="modal-title">Delete Assignment?</div>
+      <button class="modal-close" onclick="closeDeleteModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="color:var(--gray-600);">This will permanently delete <strong id="delAsgTitle"></strong> and cannot be undone.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeDeleteModal()">Cancel</button>
+      <button class="btn btn-danger" onclick="confirmDelete()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+```html
+<script>
+let currentFilter = 'all';
+let deleteTarget = null;
+let pendingFile = null;
+
+function getAssignments() {
+  try {
+    return JSON.parse(localStorage.getItem('assignments')) || [];
+  } catch (err) {
+    console.error(err);
+    return [];
+  }
+}
+
+function saveAssignments(assignments) {
+  localStorage.setItem('assignments', JSON.stringify(assignments));
+}
+
+function getSelectedCourses() {
+  try {
+    return JSON.parse(localStorage.getItem('lecturerCourses')) || [];
+  } catch (err) {
+    console.error(err);
+    return [];
+  }
+}
+
+function populateCourseSelect() {
+  const courses = getSelectedCourses();
+  const select = document.getElementById('asgCourse');
+
+  select.innerHTML = `
+    <option value="">— Select course —</option>
+    ${courses.map(course => `<option value="${course}">${course}</option>`).join('')}
+  `;
+}
+
+function getDueStatus(dueDate) {
+  const today = new Date();
+  today.setHours(0,0,0,0);
+
+  const due = new Date(dueDate);
+  const diff = Math.ceil((due - today) / 86400000);
+
+  if (diff < 0) {
+    return {
+      label: 'Closed',
+      cls: 'closed',
+      cardCls: 'closed'
+    };
+  }
+
+  if (diff <= 3) {
+    return {
+      label: `Due in ${diff}d`,
+      cls: 'urgent',
+      cardCls: 'urgent'
+    };
+  }
+
+  return {
+    label: `Due ${due.toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: 'short'
+    })}`,
+    cls: 'open',
+    cardCls: ''
+  };
+}
+
+function renderAssignments() {
+  const search = document.getElementById('asgSearch')?.value.toLowerCase() || '';
+  let assignments = getAssignments();
+
+  if (search) {
+    assignments = assignments.filter(a =>
+      a.title.toLowerCase().includes(search) ||
+      a.course.toLowerCase().includes(search)
+    );
+  }
+
+  if (currentFilter !== 'all') {
+    const today = new Date();
+    today.setHours(0,0,0,0);
+
+    assignments = assignments.filter(a => {
+      const due = new Date(a.dueDate);
+
+      return currentFilter === 'open'
+        ? due >= today
+        : due < today;
+    });
+  }
+
+  const list = document.getElementById('assignmentsList');
+
+  if (!assignments.length) {
+    list.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">📭</div>
+        <div class="empty-title">No assignments yet</div>
+        <div class="empty-desc">
+          Use the form to post your first assignment.
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  list.innerHTML = assignments
+    .slice()
+    .reverse()
+    .map(a => {
+
+      const { label, cls, cardCls } = getDueStatus(a.dueDate);
+
+      return `
+        <div class="assignment-card ${cardCls}">
+          
+          <div style="display:flex;justify-content:space-between;gap:10px;margin-bottom:4px;">
+            <div class="ac-title">${a.title}</div>
+            <span class="due-chip ${cls}">${label}</span>
+          </div>
+
+          <div class="ac-meta">
+            <span class="badge badge-navy">${a.course}</span>
+            ${a.marks ? `<span>${a.marks} marks ·</span>` : ''}
+            <span>${a.subType} ·</span>
+            <span> Posted ${a.posted}</span>
+          </div>
+
+          <div class="ac-desc">
+            ${a.desc.length > 200 ? a.desc.slice(0,200) + '…' : a.desc}
+          </div>
+
+          ${
+            a.fileName
+            ? `
+            <div style="display:flex;gap:7px;font-size:12px;color:var(--blue);margin-bottom:10px;">
+              <span>📎</span>
+              <span>${a.fileName}</span>
+            </div>
+            `
+            : ''
+          }
+
+          <div class="ac-footer">
+
+            <div class="ac-stats">
+              <span class="ac-stat">👥 ${a.submissions || 0} submissions</span>
+
+              <span class="ac-stat">
+                📅 Due ${new Date(a.dueDate).toLocaleDateString('en-GB',{
+                  day:'2-digit',
+                  month:'short',
+                  year:'numeric'
+                })}
+              </span>
+            </div>
+
+            <div style="display:flex;gap:6px;">
+              <button class="btn btn-sm btn-outline"
+                onclick="editAssignment(${a.id})">
+                ✏️ Edit
+              </button>
+
+              <button class="btn btn-sm btn-danger"
+                onclick="openDeleteModal(${a.id}, \`${a.title}\`)">
+                🗑️
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+      `;
+    })
+    .join('');
+}
+
+function postAssignment() {
+
+  const course = document.getElementById('asgCourse').value;
+  const title = document.getElementById('asgTitle').value.trim();
+  const desc = document.getElementById('asgDesc').value.trim();
+  const due = document.getElementById('asgDue').value;
+  const marks = document.getElementById('asgMarks').value;
+  const subType = document.getElementById('asgSubType').value;
+  const editId = document.getElementById('editId').value;
+
+  if (!course) {
+    showToast('Please select a course', 'error');
+    return;
+  }
+
+  if (!title) {
+    showToast('Please enter a title', 'error');
+    return;
+  }
+
+  if (!desc) {
+    showToast('Please enter a description', 'error');
+    return;
+  }
+
+  if (!due) {
+    showToast('Please select a due date', 'error');
+    return;
+  }
+
+  const assignments = getAssignments();
+
+  if (editId) {
+
+    const index = assignments.findIndex(a => a.id === Number(editId));
+
+    if (index !== -1) {
+
+      assignments[index] = {
+        ...assignments[index],
+        course,
+        title,
+        desc,
+        dueDate: due,
+        marks,
+        subType,
+        fileName: pendingFile?.name || assignments[index].fileName
+      };
+
+      showToast('Assignment updated', 'success');
+    }
+
+    cancelEdit();
+
+  } else {
+
+    assignments.push({
+      id: Date.now(),
+      course,
+      title,
+      desc,
+      dueDate: due,
+      marks,
+      subType,
+      fileName: pendingFile?.name || '',
+      posted: new Date().toLocaleDateString('en-GB',{
+        day:'2-digit',
+        month:'short',
+        year:'numeric'
+      }),
+      submissions: 0
+    });
+
+    showToast('Assignment posted successfully', 'success');
+  }
+
+  saveAssignments(assignments);
+  clearForm();
+  renderAssignments();
+}
+
+function editAssignment(id) {
+
+  const assignment = getAssignments().find(a => a.id === id);
+
+  if (!assignment) return;
+
+  document.getElementById('editId').value = assignment.id;
+  document.getElementById('asgCourse').value = assignment.course;
+  document.getElementById('asgTitle').value = assignment.title;
+  document.getElementById('asgDesc').value = assignment.desc;
+  document.getElementById('asgDue').value = assignment.dueDate;
+  document.getElementById('asgMarks').value = assignment.marks || '';
+  document.getElementById('asgSubType').value = assignment.subType;
+
+  document.getElementById('editBadge').style.display = 'inline-flex';
+  document.getElementById('cancelEdit').style.display = 'inline-flex';
+
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+
+  showToast('Editing assignment');
+}
+
+function cancelEdit() {
+
+  document.getElementById('editId').value = '';
+  document.getElementById('editBadge').style.display = 'none';
+  document.getElementById('cancelEdit').style.display = 'none';
+
+  clearForm();
+}
+
+function clearForm() {
+
+  [
+    'asgCourse',
+    'asgTitle',
+    'asgDesc',
+    'asgDue',
+    'asgMarks'
+  ].forEach(id => {
+
+    const el = document.getElementById(id);
+
+    if (el) el.value = '';
+  });
+
+  document.getElementById('asgSubType').value = 'File Upload';
+
+  clearAttach();
+}
+
+function previewAsgFile(input) {
+
+  const file = input.files[0];
+
+  if (!file) return;
+
+  pendingFile = file;
+
+  document.getElementById('attachName').textContent = file.name;
+  document.getElementById('attachPreview').style.display = 'flex';
+  document.getElementById('asgFileLabel').textContent = 'File selected';
+}
+
+function clearAttach() {
+
+  pendingFile = null;
+
+  document.getElementById('attachPreview').style.display = 'none';
+  document.getElementById('asgFileLabel').textContent = 'Click to attach a file';
+  document.getElementById('asgFile').value = '';
+}
+
+function handleDrop(event) {
+
+  event.preventDefault();
+
+  const file = event.dataTransfer.files[0];
+
+  if (!file) return;
+
+  pendingFile = file;
+
+  document.getElementById('attachName').textContent = file.name;
+  document.getElementById('attachPreview').style.display = 'flex';
+  document.getElementById('asgFileLabel').textContent = 'File selected';
+}
+
+function openDeleteModal(id, title) {
+
+  deleteTarget = id;
+
+  document.getElementById('delAsgTitle').textContent = title;
+
+  document.getElementById('deleteModal').classList.add('open');
+}
+
+function closeDeleteModal() {
+
+  document.getElementById('deleteModal').classList.remove('open');
+}
+
+function confirmDelete() {
+
+  const updated = getAssignments().filter(a => a.id !== deleteTarget);
+
+  saveAssignments(updated);
+
+  closeDeleteModal();
+
+  renderAssignments();
+
+  showToast('Assignment deleted', 'warn');
+}
+
+function setFilter(button, value) {
+
+  currentFilter = value;
+
+  document.querySelectorAll('.filter-btn')
+    .forEach(btn => btn.classList.remove('active'));
+
+  button.classList.add('active');
+
+  renderAssignments();
+}
+
+function showToast(message, type = '') {
+
+  const toast = document.createElement('div');
+
+  toast.className = `toast ${type ? 'toast-' + type : ''}`;
+
+  toast.textContent = message;
+
+  document.getElementById('toastContainer').appendChild(toast);
+
+  setTimeout(() => {
+    toast.remove();
+  }, 3500);
+}
+
+const defaultDate = new Date();
+defaultDate.setDate(defaultDate.getDate() + 14);
+
+document.getElementById('asgDue').value =
+  defaultDate.toISOString().split('T')[0];
+
+populateCourseSelect();
+renderAssignments();
+</script>
+```
+
+</body>
+</html>

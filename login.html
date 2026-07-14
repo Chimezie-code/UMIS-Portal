@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login — UMIS Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy:       #0D1B2A;
+      --navy-light: #1A2D42;
+      --gold:       #C9A844;
+      --gold-light: #F0D98B;
+      --cream:      #F8F5EF;
+      --gray-100:   #F1F3F5;
+      --gray-200:   #E5E8EC;
+      --gray-400:   #9CA3AF;
+      --gray-500:   #6B7280;
+      --gray-900:   #111827;
+      --success:    #16A34A;
+      --danger:     #DC2626;
+      --shadow:     0 4px 24px rgba(13,27,42,0.12);
+      --shadow-lg:  0 8px 48px rgba(13,27,42,0.18);
+      --radius:     14px;
+      --font:       'DM Sans', sans-serif;
+      --font-display: 'Playfair Display', Georgia, serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font);
+      background: var(--navy);
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    /* ── LEFT PANEL ── */
+    .left-panel {
+      background: linear-gradient(160deg, var(--navy) 0%, #162234 60%, #1E3A5A 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 48px 56px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .left-panel::before {
+      content: '';
+      position: absolute;
+      top: -120px; right: -120px;
+      width: 500px; height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,168,68,0.08) 0%, transparent 70%);
+    }
+    .left-panel::after {
+      content: '';
+      position: absolute;
+      bottom: -80px; left: -80px;
+      width: 360px; height: 360px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,168,68,0.05) 0%, transparent 70%);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-decoration: none;
+      position: relative; z-index: 1;
+    }
+    .brand-icon {
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display);
+      font-size: 22px; font-weight: 700;
+      color: var(--navy);
+      box-shadow: 0 4px 16px rgba(201,168,68,0.35);
+    }
+    .brand-text {
+      font-family: var(--font-display);
+      font-size: 22px; font-weight: 700;
+      color: white; letter-spacing: 0.5px;
+    }
+    .brand-text span { color: var(--gold); }
+
+    .left-hero {
+      position: relative; z-index: 1;
+    }
+    .left-hero h1 {
+      font-family: var(--font-display);
+      font-size: 44px; font-weight: 700;
+      color: white; line-height: 1.2;
+      margin-bottom: 20px;
+    }
+    .left-hero h1 em {
+      font-style: normal;
+      color: var(--gold);
+    }
+    .left-hero p {
+      font-size: 16px;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.7;
+      max-width: 340px;
+      margin-bottom: 40px;
+    }
+
+    .feature-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .feature-list li {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 14px;
+      color: rgba(255,255,255,0.7);
+    }
+    .feature-icon {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      background: rgba(201,168,68,0.15);
+      border: 1px solid rgba(201,168,68,0.25);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; flex-shrink: 0;
+    }
+
+    .left-footer {
+      font-size: 13px;
+      color: rgba(255,255,255,0.3);
+      position: relative; z-index: 1;
+    }
+
+    /* ── RIGHT PANEL ── */
+    .right-panel {
+      background: var(--cream);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 40px;
+    }
+
+    .login-box {
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .login-box h2 {
+      font-family: var(--font-display);
+      font-size: 32px; font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+    .login-box .subtitle {
+      font-size: 14px;
+      color: var(--gray-500);
+      margin-bottom: 32px;
+    }
+
+    /* Role tabs */
+    .role-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: var(--gray-200);
+      border-radius: 10px;
+      padding: 4px;
+      margin-bottom: 28px;
+    }
+    .role-tab {
+      padding: 10px;
+      text-align: center;
+      font-size: 14px; font-weight: 600;
+      color: var(--gray-500);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none; background: transparent;
+    }
+    .role-tab.active {
+      background: var(--navy);
+      color: white;
+      box-shadow: 0 2px 8px rgba(13,27,42,0.2);
+    }
+
+    /* Form */
+    .form-group {
+      margin-bottom: 18px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 13px; font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 7px;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 13px 16px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: 10px;
+      font-family: var(--font);
+      font-size: 14px;
+      color: var(--gray-900);
+      background: white;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+    .form-group input:focus {
+      border-color: var(--navy);
+      box-shadow: 0 0 0 3px rgba(13,27,42,0.08);
+    }
+    .form-group input::placeholder {
+      color: var(--gray-400);
+    }
+
+    .password-wrap {
+      position: relative;
+    }
+    .password-wrap input { padding-right: 46px; }
+    .toggle-pw {
+      position: absolute; right: 14px; top: 50%;
+      transform: translateY(-50%);
+      background: none; border: none;
+      cursor: pointer; font-size: 17px; color: var(--gray-400);
+    }
+
+    .btn-login {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--navy), var(--navy-light));
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-family: var(--font);
+      font-size: 15px; font-weight: 700;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      transition: opacity 0.2s, transform 0.1s;
+      margin-top: 8px;
+    }
+    .btn-login:hover { opacity: 0.92; transform: translateY(-1px); }
+    .btn-login:active { transform: translateY(0); }
+    .btn-login:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .spinner {
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .alert {
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 20px;
+      display: none;
+    }
+    .alert.show { display: block; }
+    .alert-danger  { background: #FEF2F2; border: 1px solid #FECACA; color: var(--danger); }
+    .alert-success { background: #F0FDF4; border: 1px solid #BBF7D0; color: var(--success); }
+
+    .divider {
+      display: flex; align-items: center; gap: 12px;
+      margin: 24px 0;
+      color: var(--gray-400); font-size: 12px;
+    }
+    .divider::before, .divider::after {
+      content: ''; flex: 1; height: 1px; background: var(--gray-200);
+    }
+
+    .reg-links {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+    }
+    .reg-link {
+      display: block;
+      padding: 12px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: 10px;
+      text-align: center;
+      text-decoration: none;
+      font-size: 13px; font-weight: 600;
+      color: var(--navy);
+      background: white;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .reg-link:hover {
+      border-color: var(--gold);
+      box-shadow: 0 2px 8px rgba(201,168,68,0.15);
+    }
+    .reg-link small {
+      display: block;
+      font-weight: 400;
+      color: var(--gray-400);
+      font-size: 11px;
+      margin-top: 2px;
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      body { grid-template-columns: 1fr; }
+      .left-panel { display: none; }
+      .right-panel { padding: 32px 24px; min-height: 100vh; }
+    }
+
+    .fade-in {
+      animation: fadeIn 0.5s ease both;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- LEFT PANEL -->
+<div class="left-panel">
+  <a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\home.html" class="brand">
+    <div class="brand-icon">U</div>
+    <div class="brand-text">UMIS <span>Portal</span></div>
+  </a>
+
+  <div class="left-hero">
+    <h1>Welcome back to<br><em>UMIS Portal</em></h1>
+    <p>Your all-in-one university management hub. Access your courses, results, schedules, and more — anytime, anywhere.</p>
+    <ul class="feature-list">
+      <li>
+        <div class="feature-icon">📚</div>
+        <span>View registered courses &amp; progress</span>
+      </li>
+      <li>
+        <div class="feature-icon">📊</div>
+        <span>Check your results &amp; CGPA</span>
+      </li>
+      <li>
+        <div class="feature-icon">📅</div>
+        <span>Access your class schedule</span>
+      </li>
+      <li>
+        <div class="feature-icon">💳</div>
+        <span>Manage fee payments &amp; clearance</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="left-footer">© 2026 UMIS — University Management Information System</div>
+</div>
+
+<!-- RIGHT PANEL -->
+<div class="right-panel">
+  <div class="login-box fade-in">
+    <h2>Sign in</h2>
+    <p class="subtitle">Access your portal with your registered credentials.</p>
+
+    <!-- Role tabs -->
+    <div class="role-tabs">
+      <button class="role-tab active" id="tabStudent" onclick="setRole('student')">🎓 Student</button>
+      <button class="role-tab" id="tabLecturer" onclick="setRole('lecturer')">🏫 Lecturer</button>
+    </div>
+
+    <!-- Alert -->
+    <div class="alert" id="alert"></div>
+
+    <form id="loginForm">
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="email" placeholder="your@university.edu" required autocomplete="email" />
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <div class="password-wrap">
+          <input type="password" id="password" placeholder="Enter your password" required autocomplete="current-password" />
+          <button type="button" class="toggle-pw" onclick="togglePassword()">👁</button>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-login" id="loginBtn">
+        <span id="btnText">Sign In</span>
+        <div class="spinner" id="spinner"></div>
+      </button>
+    </form>
+
+    <div class="divider">New to UMIS? Create an account</div>
+
+    <div class="reg-links">
+      <a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\Student_page.html" class="reg-link">
+        🎓 Student
+        <small>Register as student</small>
+      </a>
+      <a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\main_page_lecturer.html" class="reg-link">
+        🏫 Lecturer
+        <small>Register as staff</small>
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+  let selectedRole = 'student';
+
+  function setRole(role) {
+    selectedRole = role;
+    document.getElementById('tabStudent').classList.toggle('active', role === 'student');
+    document.getElementById('tabLecturer').classList.toggle('active', role === 'lecturer');
+  }
+
+  function togglePassword() {
+    const pw = document.getElementById('password');
+    pw.type = pw.type === 'password' ? 'text' : 'password';
+  }
+
+  // Redirect if already logged in
+  window.addEventListener('DOMContentLoaded', () => {
+    const token = localStorage.getItem('umis_token');
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        if (payload.exp * 1000 > Date.now()) {
+          window.location.href = payload.role === 'student' ? 'Academic_page.html' : 'Lecturer_page.html';
+          return;
+        }
+      } catch {}
+    }
+  });
+
+  document.getElementById('loginForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const alertEl  = document.getElementById('alert');
+    const email    = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+
+    alertEl.className = 'alert';
+    document.getElementById('btnText').textContent = 'Signing in…';
+    document.getElementById('spinner').style.display = 'block';
+    document.getElementById('loginBtn').disabled = true;
+
+    try {
+      const res  = await fetch('http://localhost:3000/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, role: selectedRole })
+      });
+      const data = await res.json();
+
+      if (res.ok) {
+        localStorage.setItem('umis_token', data.token);
+        localStorage.setItem('umis_user',  JSON.stringify(data.user));
+
+        alertEl.className = 'alert alert-success show';
+        alertEl.textContent = `✅ Welcome back, ${data.user.firstName}! Redirecting…`;
+
+        setTimeout(() => {
+          window.location.href = data.user.role === 'student' ? 'Academic_page.html' : 'Lecturer_page.html';
+        }, 1200);
+      } else {
+        alertEl.className = 'alert alert-danger show';
+        alertEl.textContent = '❌ ' + data.message;
+      }
+    } catch {
+      alertEl.className = 'alert alert-danger show';
+      alertEl.innerHTML = '⚠️ Cannot reach server. Make sure the backend is running (<code>node server.js</code>).';
+    } finally {
+      document.getElementById('btnText').textContent = 'Sign In';
+      document.getElementById('spinner').style.display = 'none';
+      document.getElementById('loginBtn').disabled = false;
+    }
+  });
+</script>
+</body>
+</html>

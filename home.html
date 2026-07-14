@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UMIS — University Management Information System</title>
+  <link rel="stylesheet" href="page.css" />
+  <style>
+    /* HERO */
+    .hero {
+      background: linear-gradient(135deg, var(--navy) 0%, #122B60 55%, #1A3575 100%);
+      min-height: 92vh;
+      display: flex; align-items: center;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 70% 50%, rgba(201,168,68,0.12) 0%, transparent 70%);
+    }
+    .hero-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    .hero-content {
+      position: relative; z-index: 1;
+      max-width: 1200px; margin: 0 auto; padding: 0 40px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+    }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(201,168,68,0.15); border: 1px solid rgba(201,168,68,0.3);
+      border-radius: 20px; padding: 6px 14px;
+      font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 20px;
+    }
+    .hero-eyebrow::before { content: '●'; font-size: 8px; }
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: 58px; font-weight: 700; line-height: 1.1;
+      color: white; margin-bottom: 22px;
+    }
+    .hero h1 em { color: var(--gold); font-style: normal; }
+    .hero p {
+      font-size: 17px; color: rgba(255,255,255,0.72);
+      line-height: 1.75; margin-bottom: 36px;
+    }
+    .hero-buttons { display: flex; gap: 14px; flex-wrap: wrap; }
+    .hero-stats {
+      display: grid; grid-template-columns: repeat(3,1fr); gap: 1px;
+      background: rgba(255,255,255,0.08); border-radius: var(--radius);
+      overflow: hidden; margin-top: 40px;
+    }
+    .hero-stat {
+      background: rgba(255,255,255,0.05);
+      padding: 20px; text-align: center;
+      backdrop-filter: blur(4px);
+    }
+    .hero-stat-val {
+      font-family: var(--font-display);
+      font-size: 32px; font-weight: 700; color: var(--gold);
+    }
+    .hero-stat-lbl { font-size: 12px; color: rgba(255,255,255,0.55); margin-top: 3px; }
+
+    /* PORTAL CARDS VISUAL */
+    .hero-visual { position: relative; }
+    .portal-cards-visual {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+      transform: perspective(800px) rotateY(-8deg) rotateX(4deg);
+      animation: float 5s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: perspective(800px) rotateY(-8deg) rotateX(4deg) translateY(0); }
+      50% { transform: perspective(800px) rotateY(-8deg) rotateX(4deg) translateY(-10px); }
+    }
+    .vis-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 14px; padding: 20px;
+      backdrop-filter: blur(8px);
+    }
+    .vis-card.gold { background: rgba(201,168,68,0.12); border-color: rgba(201,168,68,0.25); }
+    .vis-card .vis-icon { font-size: 28px; margin-bottom: 10px; }
+    .vis-card .vis-title { font-weight: 700; color: white; font-size: 14px; }
+    .vis-card .vis-sub { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 4px; }
+    .vis-card .vis-bar {
+      height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px;
+      margin-top: 12px; overflow: hidden;
+    }
+    .vis-card .vis-bar span {
+      display: block; height: 100%; border-radius: 2px;
+      background: var(--gold);
+    }
+
+    /* PORTAL ACCESS SECTION */
+    .access-section { background: var(--cream); padding: 88px 0; }
+    .section-label {
+      font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 10px; display: block;
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 40px; font-weight: 700; color: var(--navy); line-height: 1.2;
+    }
+    .section-subtitle { font-size: 16px; color: var(--gray-500); margin-top: 12px; }
+
+    .access-cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 28px; margin-top: 52px; }
+    .access-card {
+      background: white; border-radius: 18px; overflow: hidden;
+      box-shadow: var(--shadow); transition: var(--transition);
+    }
+    .access-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-xl); }
+    .access-card-top {
+      padding: 36px 30px; display: flex; flex-direction: column; align-items: flex-start;
+    }
+    .access-card-icon {
+      width: 60px; height: 60px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px; margin-bottom: 20px;
+    }
+    .access-card-icon.student { background: #EEF2FF; }
+    .access-card-icon.lecturer { background: var(--gold-pale); }
+    .access-card-icon.admin { background: #F0FDF4; }
+    .access-card h3 { font-family: var(--font-display); font-size: 24px; font-weight: 700; color: var(--navy); }
+    .access-card p { font-size: 14px; color: var(--gray-500); margin-top: 8px; line-height: 1.65; }
+    .access-card-bottom {
+      padding: 20px 30px; background: var(--gray-50);
+      border-top: 1px solid var(--gray-100);
+      display: flex; gap: 10px;
+    }
+
+    /* FEATURES */
+    .features-section { background: white; padding: 88px 0; }
+    .features-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 28px; margin-top: 52px; }
+    .feature-item { text-align: center; }
+    .feature-icon {
+      width: 64px; height: 64px; background: rgba(11,31,75,0.06);
+      border-radius: 16px; display: flex; align-items: center; justify-content: center;
+      font-size: 28px; margin: 0 auto 18px;
+    }
+    .feature-item h4 { font-family: var(--font-display); font-size: 19px; font-weight: 600; color: var(--navy); margin-bottom: 8px; }
+    .feature-item p { font-size: 14px; color: var(--gray-500); line-height: 1.65; }
+
+    /* ANNOUNCEMENT STRIP */
+    .announce-strip {
+      background: var(--navy);
+      padding: 16px 40px;
+      display: flex; align-items: center; gap: 20px;
+      overflow: hidden;
+    }
+    .announce-label {
+      background: var(--gold); color: var(--navy);
+      font-size: 11px; font-weight: 800; letter-spacing: 1px;
+      padding: 4px 10px; border-radius: 4px; white-space: nowrap;
+      text-transform: uppercase;
+    }
+    .announce-text {
+      color: rgba(255,255,255,0.8); font-size: 14px;
+      animation: ticker 25s linear infinite;
+      white-space: nowrap;
+    }
+    @keyframes ticker {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    @media (max-width: 1024px) {
+      .hero-content { grid-template-columns: 1fr; }
+      .hero-visual { display: none; }
+      .hero h1 { font-size: 42px; }
+      .access-cards, .features-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 600px) {
+      .access-cards, .features-grid, .hero-stats { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="portal-nav">
+  <a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\home.html" class="brand">
+    <div class="brand-icon">U</div>
+    <div class="brand-text">UMIS <span>Portal</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\home.html" class="active">Home</a></li>
+    <li><a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\help.html">About Us</a></li>
+    <li><a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\Addmission.html">Admission</a></li>
+    <li><a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\Academic_page.html">Academic</a></li>
+    <li><a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\Student_page.html" class="nav-cta">Student Portal →</a></li>
+  </ul>
+</nav>
+
+<!-- ANNOUNCEMENT STRIP -->
+<div class="announce-strip">
+  <span class="announce-label">📢 Notice</span>
+  <span class="announce-text">
+    Welcome to the UMIS Portal &nbsp;|&nbsp; Second Semester Registration is now open &nbsp;|&nbsp;
+    Admission deadline: July 31st, 2026 &nbsp;|&nbsp; Library e-resources updated for all departments &nbsp;|&nbsp;
+    Welcome to the UMIS Portal &nbsp;|&nbsp; Second Semester Registration is now open &nbsp;|&nbsp;
+    Admission deadline: July 31st, 2026 &nbsp;|&nbsp; Library e-resources updated for all departments
+  </span>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="fade-in">
+      <div class="hero-eyebrow">Academic Year 2025/2026</div>
+      <h1>Empowering <em>Academic</em> Excellence</h1>
+      <p>
+        The University Management Information System brings students, lecturers, and
+        administration together on one seamless digital platform — built for efficiency,
+        designed for growth.
+      </p>
+      <div class="hero-buttons">
+        <a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\Student_page.html" class="btn btn-gold btn-lg">Student Portal</a>
+        <a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\main_page_lecturer.html" class="btn btn-white btn-lg">Lecturer Login</a>
+        <a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\Addmission.html" class="btn btn-outline btn-lg" style="border-color:rgba(255,255,255,0.4);color:white;">Apply Now</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><div class="hero-stat-val">1,200+</div><div class="hero-stat-lbl">Students Enrolled</div></div>
+        <div class="hero-stat"><div class="hero-stat-val">85+</div><div class="hero-stat-lbl">Faculty Members</div></div>
+        <div class="hero-stat"><div class="hero-stat-val">32</div><div class="hero-stat-lbl">Programmes</div></div>
+      </div>
+    </div>
+    <div class="hero-visual fade-in-2">
+      <div class="portal-cards-visual">
+        <div class="vis-card gold">
+          <div class="vis-icon">🎓</div>
+          <div class="vis-title">Student Dashboard</div>
+          <div class="vis-sub">GPA: 3.72 · Semester 2</div>
+          <div class="vis-bar"><span style="width:74%"></span></div>
+        </div>
+        <div class="vis-card">
+          <div class="vis-icon">📚</div>
+          <div class="vis-title">Course Load</div>
+          <div class="vis-sub">6 Courses Active</div>
+          <div class="vis-bar"><span style="width:60%"></span></div>
+        </div>
+        <div class="vis-card">
+          <div class="vis-icon">💳</div>
+          <div class="vis-title">Fees Status</div>
+          <div class="vis-sub">Cleared — Sem 2</div>
+          <div class="vis-bar"><span style="width:100%"></span></div>
+        </div>
+        <div class="vis-card gold">
+          <div class="vis-icon">🏛️</div>
+          <div class="vis-title">Lecturer Portal</div>
+          <div class="vis-sub">42 Students · 3 Courses</div>
+          <div class="vis-bar"><span style="width:85%"></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PORTAL ACCESS -->
+<section class="access-section">
+  <div class="container">
+    <div class="text-center">
+      <span class="section-label">Portal Access</span>
+      <h2 class="section-title">Your Gateway to <span class="text-gold">University Services</span></h2>
+      <p class="section-subtitle">Select your role to access your personalised dashboard and tools.</p>
+    </div>
+    <div class="access-cards">
+      <div class="access-card fade-in-1">
+        <div class="access-card-top">
+          <div class="access-card-icon student">🎓</div>
+          <h3>Student Portal</h3>
+          <p>Access your courses, results, fee payments, timetable, and academic records all in one place.</p>
+        </div>
+        <div class="access-card-bottom">
+          <a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\Student_page.html" class="btn btn-primary btn-sm">Register</a>
+          <a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\Academic_page.html" class="btn btn-outline btn-sm">Dashboard</a>
+        </div>
+      </div>
+      <div class="access-card fade-in-2">
+        <div class="access-card-top">
+          <div class="access-card-icon lecturer">🏫</div>
+          <h3>Lecturer Portal</h3>
+          <p>Manage your courses, upload materials, track attendance, and engage with your students.</p>
+        </div>
+        <div class="access-card-bottom">
+          <a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\main_page_lecturer.html" class="btn btn-primary btn-sm">Register</a>
+          <a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\Lecturer_page.html" class="btn btn-outline btn-sm">Dashboard</a>
+        </div>
+      </div>
+      <div class="access-card fade-in-3">
+        <div class="access-card-top">
+          <div class="access-card-icon admin">📋</div>
+          <h3>Admission</h3>
+          <p>Apply for admission, complete your application form, upload documents, and track your status.</p>
+        </div>
+        <div class="access-card-bottom">
+          <a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\Addmission.html" class="btn btn-primary btn-sm">Apply Now</a>
+          <a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\payment.html" class="btn btn-outline btn-sm">Pay Fees</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features-section">
+  <div class="container">
+    <div class="text-center">
+      <span class="section-label">Why UMIS</span>
+      <h2 class="section-title">Everything You Need, <span class="text-gold">In One Place</span></h2>
+    </div>
+    <div class="features-grid">
+      <div class="feature-item fade-in-1">
+        <div class="feature-icon">📊</div>
+        <h4>Academic Tracking</h4>
+        <p>Real-time access to your results, CGPA, course progress and academic history.</p>
+      </div>
+      <div class="feature-item fade-in-2">
+        <div class="feature-icon">💰</div>
+        <h4>Online Payments</h4>
+        <p>Pay school fees, admission charges, and view payment history securely online.</p>
+      </div>
+      <div class="feature-item fade-in-3">
+        <div class="feature-icon">📖</div>
+        <h4>E-Library</h4>
+        <p>Download textbooks, research papers, past questions, and course materials anytime.</p>
+      </div>
+      <div class="feature-item fade-in-4">
+        <div class="feature-icon">🛡️</div>
+        <h4>Secure & Reliable</h4>
+        <p>Your data is protected. Role-based access ensures privacy and data security.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="portal-footer">
+  <p>© 2026 <strong>UMIS</strong> — University Management Information System. All rights reserved.</p>
+  <p style="margin-top:8px;">
+    <a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\help.html">About</a>
+
+  </p>
+</footer>
+
+</body>
+</html>

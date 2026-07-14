@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Timetable — UMIS Student</title>
+  <link rel="stylesheet" href="page1.css" />
+  <style>
+    .tt-wrap { overflow-x: auto; }
+    .tt-table { width: 100%; border-collapse: collapse; min-width: 640px; }
+    .tt-table th {
+      background: var(--navy); color: white;
+      padding: 12px 10px; font-size: 12px; font-weight: 700;
+      letter-spacing: .5px; text-align: center;
+    }
+    .tt-table td {
+      border: 1px solid var(--gray-200); padding: 5px;
+      min-width: 100px; height: 62px; vertical-align: middle; background: white;
+    }
+    .tt-table td.time-col {
+      background: var(--navy); color: white; font-size: 12px;
+      font-weight: 700; text-align: center; width: 70px; min-width: 70px;
+    }
+    .tt-table tr:hover td:not(.time-col) { background: var(--gray-50); }
+    .tt-slot {
+      padding: 6px 8px; border-radius: 7px;
+      font-size: 11.5px; font-weight: 700; line-height: 1.3;
+      display: block; text-align: center;
+    }
+    .tt-slot.navy { background: var(--navy); color: white; }
+    .tt-slot.gold { background: var(--gold); color: var(--navy); }
+    .tt-slot.green { background: var(--green); color: white; }
+    .tt-slot.blue { background: var(--blue); color: white; }
+    .tt-slot-venue { font-weight: 400; font-size: 10px; opacity: .85; }
+    .today-col td:not(.time-col) { background: rgba(201,168,76,.06) !important; }
+    .today-col th { background: var(--gold) !important; color: var(--navy) !important; }
+
+    .today-schedule { display: flex; flex-direction: column; gap: 10px; }
+    .today-class {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 14px; border-radius: var(--radius-sm);
+      border: 1px solid var(--gray-200); background: white; transition: var(--transition);
+    }
+    .today-class:hover { border-color: var(--navy); box-shadow: var(--shadow-xs); }
+    .tc-time {
+      min-width: 52px; text-align: center;
+      font-size: 13px; font-weight: 800; color: var(--navy);
+    }
+    .tc-dot {
+      width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+    }
+    .tc-dot.navy { background: var(--navy); }
+    .tc-dot.gold { background: var(--gold); }
+    .tc-dot.green { background: var(--green); }
+    .tc-dot.blue { background: var(--blue); }
+
+    .material-card {
+      border: 1px solid var(--gray-200); border-radius: var(--radius-sm);
+      padding: 12px 14px; margin-bottom: 8px; background: white;
+      display: flex; align-items: center; gap: 12px; transition: var(--transition);
+    }
+    .material-card:hover { border-color: var(--navy); box-shadow: var(--shadow-xs); }
+  </style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-text">UMIS <span>Portal</span></div>
+      <div class="brand-sub">Student Portal</div>
+    </div>
+    <div class="sidebar-user">
+      <div class="user-avatar">CN</div>
+      <div>
+        <div class="user-name">Chioma Nwachukwu</div>
+        <div class="user-role">400L · Computer Science</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">Main</div>
+      <a href="student_page.html"><span class="icon">🏠</span> Dashboard</a>
+      <a href="student_page.html#courses"><span class="icon">📚</span> My Courses</a>
+      <a href="student_timetable.html" class="active"><span class="icon">📅</span> My Timetable</a>
+      <a href="student_assignments.html"><span class="icon">📋</span> Assignments</a>
+      <div class="nav-section-title">Resources</div>
+      <a href="library.html"><span class="icon">🏛️</span> E-Library</a>
+      <div class="nav-section-title">Account</div>
+      <a href="#"><span class="icon">👤</span> My Profile</a>
+      <a href="home.html"><span class="icon">🚪</span> Logout</a>
+    </nav>
+    <div class="sidebar-footer">© 2026 UMIS Portal</div>
+  </aside>
+
+  <div class="main-content">
+    <div class="main-topbar">
+      <div class="topbar-title">My Timetable</div>
+      <div class="topbar-right">
+        <button class="notification-btn">🔔</button>
+        <span class="badge badge-gold" id="todayBadge">Today</span>
+        <button class="btn btn-primary btn-sm" onclick="window.print()">🖨️ Print</button>
+      </div>
+    </div>
+
+    <div class="content-area">
+      <!-- WEEK TIMETABLE -->
+      <div class="card" style="margin-bottom:24px;">
+        <div class="card-header">
+          <div class="card-title">Weekly Schedule — Semester 2, 2025/2026</div>
+          <div id="lastUpdated" style="font-size:12px;color:var(--gray-500);"></div>
+        </div>
+        <div id="noTimetable" style="display:none;" class="empty-state">
+          <div class="empty-icon">📅</div>
+          <div class="empty-title">Timetable not published yet</div>
+          <div class="empty-desc">Your lecturer hasn't published the timetable for this semester yet. Check back soon.</div>
+        </div>
+        <div id="ttContainer" class="tt-wrap">
+          <table class="tt-table" id="ttTable"></table>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+        <!-- TODAY'S CLASSES -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Today's Classes</div>
+            <span class="badge badge-navy" id="todayCount">0 classes</span>
+          </div>
+          <div id="todayClasses">
+            <div style="font-size:13px;color:var(--gray-400);text-align:center;padding:24px 0;">No classes scheduled today</div>
+          </div>
+        </div>
+
+        <!-- SHARED MATERIALS -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Shared Materials</div>
+            <a href="#" style="font-size:12px;color:var(--navy);text-decoration:none;font-weight:600;">View All</a>
+          </div>
+          <div id="materialsList">
+            <div style="font-size:13px;color:var(--gray-400);text-align:center;padding:24px 0;">No materials uploaded yet</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const DAYS = ['MON','TUE','WED','THU','FRI'];
+const TIMES = ['07:00','08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00'];
+const CATALOG = {
+  'CSC 101':'Introduction to Computing','CSC 201':'Introduction to Programming',
+  'CSC 301':'Data Structures & Algorithms','CSC 401':'Artificial Intelligence',
+  'CSC 403':'Database Systems','CSC 405':'Software Engineering',
+  'CSC 407':'Computer Networks','CSC 409':'Operating Systems',
+  'MTH 301':'Numerical Methods','STA 201':'Probability & Statistics',
+};
+const DAY_MAP = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+const todayDay = DAY_MAP[new Date().getDay()];
+
+function getTTData() { try { return JSON.parse(localStorage.getItem('timetableGrid')||'{}'); } catch{ return {}; } }
+function getMaterials() { try { return JSON.parse(localStorage.getItem('uploadedMaterials')||'[]'); } catch{ return []; } }
+function getEnrolled() {
+  const MATRIC = 'CSC/2022/040';
+  const all = JSON.parse(localStorage.getItem('studentEnrollments')||'{}');
+  return Object.keys(all).filter(code => (all[code]||[]).some(s => s.matric === MATRIC));
+}
+
+function buildTimetable() {
+  const tt = getTTData();
+  const enrolled = getEnrolled();
+  const hasData = Object.keys(tt).length > 0;
+
+  document.getElementById('noTimetable').style.display = hasData ? 'none' : '';
+  document.getElementById('ttContainer').style.display = hasData ? '' : 'none';
+
+  if (!hasData) return;
+
+  const table = document.getElementById('ttTable');
+  let html = '<thead><tr><th>Time</th>';
+  DAYS.forEach(d => {
+    const isToday = d === todayDay;
+    html += `<th style="${isToday?'background:var(--gold);color:var(--navy);':''}">${d}${isToday?' ★':''}</th>`;
+  });
+  html += '</tr></thead><tbody>';
+  TIMES.forEach(t => {
+    html += `<tr><td class="time-col">${t}</td>`;
+    DAYS.forEach(d => {
+      const key = `${d}_${t}`;
+      const slot = tt[key];
+      const isToday = d === todayDay;
+      const cellStyle = isToday ? 'background:rgba(201,168,76,.06);' : '';
+      html += `<td style="${cellStyle}">`;
+      if (slot && enrolled.includes(slot.code)) {
+        html += `<span class="tt-slot ${slot.color}">${slot.code}<br><span class="tt-slot-venue">${slot.venue||''}</span></span>`;
+      } else if (slot) {
+        html += `<span class="tt-slot" style="background:var(--gray-100);color:var(--gray-400);">${slot.code}<br><span class="tt-slot-venue">Not enrolled</span></span>`;
+      }
+      html += '</td>';
+    });
+    html += '</tr>';
+  });
+  html += '</tbody>';
+  table.innerHTML = html;
+
+  // TODAY'S CLASSES
+  const todaySlots = TIMES.map(t => {
+    const key = `${todayDay}_${t}`;
+    return tt[key] ? { time: t, ...tt[key] } : null;
+  }).filter(Boolean).filter(s => enrolled.includes(s.code));
+
+  document.getElementById('todayCount').textContent = `${todaySlots.length} class${todaySlots.length!==1?'es':''}`;
+  document.getElementById('todayBadge').textContent = new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'short'});
+
+  const todayEl = document.getElementById('todayClasses');
+  if (todaySlots.length === 0) {
+    todayEl.innerHTML = `<div style="font-size:13px;color:var(--gray-400);text-align:center;padding:24px 0;">No classes scheduled today</div>`;
+  } else {
+    todayEl.innerHTML = `<div class="today-schedule">${todaySlots.map(s => `
+      <div class="today-class">
+        <div class="tc-time">${s.time}</div>
+        <div class="tc-dot ${s.color}"></div>
+        <div style="flex:1;">
+          <div style="font-size:13.5px;font-weight:700;color:var(--navy);">${s.code} — ${CATALOG[s.code]||s.code}</div>
+          <div style="font-size:12px;color:var(--gray-500);">${s.venue||'Venue TBA'}</div>
+        </div>
+        <span class="badge badge-gold">Today</span>
+      </div>`).join('')}</div>`;
+  }
+}
+
+function buildMaterials() {
+  const enrolled = getEnrolled();
+  const all = getMaterials().filter(m => enrolled.includes(m.course));
+  const el = document.getElementById('materialsList');
+  if (all.length === 0) {
+    el.innerHTML = `<div style="font-size:13px;color:var(--gray-400);text-align:center;padding:24px 0;">No materials uploaded yet</div>`;
+    return;
+  }
+  const icons = { pdf:'📕', doc:'📘', ppt:'📙', docx:'📘', pptx:'📙', jpg:'🖼️', png:'🖼️' };
+  el.innerHTML = all.slice(-5).reverse().map(m => {
+    const ext = m.fileName?.split('.').pop()?.toLowerCase();
+    return `<div class="material-card">
+      <span style="font-size:22px;">${icons[ext]||'📎'}</span>
+      <div style="flex:1;">
+        <div style="font-size:13px;font-weight:700;color:var(--navy);">${m.fileName}</div>
+        <div style="font-size:11.5px;color:var(--gray-500);">${m.course} · ${m.type} · ${m.date}</div>
+      </div>
+      <span class="badge badge-success">Download</span>
+    </div>`;
+  }).join('');
+}
+
+buildTimetable();
+buildMaterials();
+setInterval(() => { buildTimetable(); buildMaterials(); }, 8000);
+</script>
+</body>
+</html>

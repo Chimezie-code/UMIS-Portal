@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fee Payment — UMIS Portal</title>
+  <link rel="stylesheet" href="page.css" />
+  <style>
+    body { background: var(--cream); }
+    .pay-layout { display: grid; grid-template-columns: 1fr 380px; gap: 32px; max-width: 920px; margin: 52px auto; padding: 0 24px 72px; }
+    .pay-card { background: white; border-radius: 18px; box-shadow: var(--shadow); overflow: hidden; }
+    .pay-header {
+      background: linear-gradient(135deg, var(--navy), var(--navy-light));
+      padding: 30px 36px;
+    }
+    .pay-header h2 { font-family: var(--font-display); font-size: 28px; font-weight: 700; color: white; }
+    .pay-header p { font-size: 13px; color: rgba(255,255,255,0.65); margin-top: 6px; }
+    .pay-body { padding: 32px 36px; }
+    .payment-tabs { display: flex; gap: 0; border: 1px solid var(--gray-200); border-radius: var(--radius-sm); overflow: hidden; margin-bottom: 28px; }
+    .payment-tab {
+      flex: 1; padding: 12px; text-align: center; font-size: 14px; font-weight: 600;
+      cursor: pointer; background: white; border: none; color: var(--gray-500);
+      transition: var(--transition);
+    }
+    .payment-tab.active { background: var(--navy); color: white; }
+    .card-visual {
+      background: linear-gradient(135deg, #0B1F4B, #1E3A80);
+      border-radius: 14px; padding: 24px 28px; color: white; margin-bottom: 24px;
+      position: relative; overflow: hidden;
+    }
+    .card-visual::before {
+      content: '';
+      position: absolute; right: -20px; top: -20px;
+      width: 120px; height: 120px;
+      border-radius: 50%; background: rgba(201,168,68,0.15);
+    }
+    .card-chip { width: 36px; height: 28px; background: var(--gold); border-radius: 5px; margin-bottom: 20px; }
+    .card-number { font-size: 18px; letter-spacing: 3px; margin-bottom: 16px; font-family: monospace; }
+    .card-meta { display: flex; gap: 30px; font-size: 12px; color: rgba(255,255,255,0.65); }
+    .card-meta strong { display: block; color: white; font-size: 14px; }
+
+    .summary-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); padding: 26px; }
+    .summary-card h4 { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--navy); margin-bottom: 20px; }
+    .summary-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--gray-100); font-size: 14px; }
+    .summary-row:last-of-type { border-bottom: none; }
+    .summary-total {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 16px; background: rgba(11,31,75,0.05); border-radius: 8px; margin-top: 16px;
+      font-weight: 700;
+    }
+    .summary-total .amount { font-family: var(--font-display); font-size: 24px; color: var(--navy); }
+    .receipt-box {
+      background: linear-gradient(135deg, var(--success-bg), #ECFDF5);
+      border: 1px solid #A7F3D0; border-radius: var(--radius-sm);
+      padding: 24px; text-align: center; margin-top: 20px;
+      display: none;
+    }
+    .receipt-box.show { display: block; }
+    .receipt-icon { font-size: 40px; margin-bottom: 10px; }
+    .receipt-box h4 { font-family: var(--font-display); font-size: 22px; color: var(--success); }
+    .receipt-box p { font-size: 14px; color: var(--success); margin-top: 6px; }
+    .receipt-id { font-family: monospace; font-size: 18px; font-weight: 700; color: var(--navy); margin-top: 10px; }
+  </style>
+</head>
+<body>
+
+<nav class="portal-nav">
+  <a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\payment.html" class="brand">
+    <div class="brand-icon">U</div>
+    <div class="brand-text">UMIS <span>Portal</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\home.html">Home</a></li>
+    <li><a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\Academic_page.html">Dashboard</a></li>
+    <li><a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\Addmission.html">Admission</a></li>
+    <li><a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\help.html">Support</a></li>
+  </ul>
+</nav>
+
+<div style="background:var(--navy);padding:44px 40px;color:white;">
+  <div style="max-width:920px;margin:0 auto;">
+    <div class="breadcrumb"><a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\home.html">Home</a> › <a href="C:\Users\USER\Downloads\Aptech Projects\Html_Learning_Projects\University_Portal_project\Pages\Academic_page.html">Dashboard</a> › <span>Fee Payment</span></div>
+    <h1 style="font-family:var(--font-display);font-size:38px;font-weight:700;color:white;margin-top:8px;">School <span style="color:var(--gold)">Fee Payment</span></h1>
+    <p style="color:rgba(255,255,255,0.7);margin-top:8px;">Pay your school fees securely through the UMIS payment gateway.</p>
+  </div>
+</div>
+
+<div class="pay-layout">
+  <div class="pay-card fade-in">
+    <div class="pay-header">
+      <h2>Payment Portal</h2>
+      <p>All transactions are encrypted and secure</p>
+    </div>
+    <div class="pay-body">
+      <div class="payment-tabs">
+        <button class="payment-tab active" onclick="selectTab(this,'card')">💳 Card Payment</button>
+        <button class="payment-tab" onclick="selectTab(this,'transfer')">🏦 Bank Transfer</button>
+        <button class="payment-tab" onclick="selectTab(this,'etranzact')">📱 E-Tranzact</button>
+      </div>
+
+      <div id="alert" class="alert" style="margin-bottom:20px;"></div>
+
+      <!-- CARD VISUAL -->
+      <div class="card-visual" id="cardPreview">
+        <div class="card-chip"></div>
+        <div class="card-number" id="previewNumber">•••• •••• •••• ••••</div>
+        <div class="card-meta">
+          <div><div>Card Holder</div><strong id="previewName">Your Name</strong></div>
+          <div><div>Expires</div><strong id="previewExpiry">MM/YY</strong></div>
+        </div>
+      </div>
+
+      <form id="paymentForm">
+        <input type="hidden" name="paymentFor" value="School Fees" />
+        <input type="hidden" name="semester" value="Semester 2, 2025/2026" />
+
+        <div class="form-group">
+          <label>Student ID *</label>
+          <input type="text" name="studentId" placeholder="e.g. CSC/400/2023" required />
+        </div>
+        <div class="form-group">
+          <label>Full Name on Card *</label>
+          <input type="text" name="cardName" placeholder="Name as it appears on card" required
+            oninput="document.getElementById('previewName').textContent = this.value || 'Your Name'" />
+        </div>
+        <div class="form-group">
+          <label>Card Number *</label>
+          <input type="text" name="cardNumber" placeholder="1234 5678 9012 3456" required maxlength="19"
+            oninput="formatCard(this)" />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Expiry Date *</label>
+            <input type="text" name="expiry" placeholder="MM/YY" required maxlength="5"
+              oninput="formatExpiry(this)" />
+          </div>
+          <div class="form-group">
+            <label>CVV *</label>
+            <input type="password" name="cvv" placeholder="•••" required maxlength="4" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Amount (₦) *</label>
+          <input type="number" name="amount" placeholder="e.g. 150000" required min="0" />
+        </div>
+        <button type="submit" class="btn btn-gold btn-full btn-lg" id="payBtn" style="margin-top:8px;">
+          <span id="payBtnText">🔒 Pay Securely</span>
+          <div class="spinner" id="spinner"></div>
+        </button>
+      </form>
+
+      <div class="receipt-box" id="receiptBox">
+        <div class="receipt-icon">✅</div>
+        <h4>Payment Successful!</h4>
+        <p>Your payment has been processed and recorded.</p>
+        <div class="receipt-id" id="receiptId">TXN-XXXXXXXX</div>
+        <p style="margin-top:8px;font-size:12px;">A receipt has been sent to your email address.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUMMARY SIDEBAR -->
+  <div>
+    <div class="summary-card fade-in-1">
+      <h4>Payment Summary</h4>
+      <div class="summary-row"><span style="color:var(--gray-500)">Student</span><span style="font-weight:600">James Okafor</span></div>
+      <div class="summary-row"><span style="color:var(--gray-500)">Matric No.</span><span style="font-weight:600">CSC/400/2023</span></div>
+      <div class="summary-row"><span style="color:var(--gray-500)">Department</span><span style="font-weight:600">Computer Science</span></div>
+      <div class="summary-row"><span style="color:var(--gray-500)">Semester</span><span style="font-weight:600">2nd Sem 2025/26</span></div>
+      <div class="summary-row"><span style="color:var(--gray-500)">Tuition Fee</span><span>₦120,000</span></div>
+      <div class="summary-row"><span style="color:var(--gray-500)">Development Levy</span><span>₦15,000</span></div>
+      <div class="summary-row"><span style="color:var(--gray-500)">Library Fee</span><span>₦5,000</span></div>
+      <div class="summary-row"><span style="color:var(--gray-500)">Union Fee</span><span>₦5,000</span></div>
+      <div class="summary-row"><span style="color:var(--gray-500)">Medical Fee</span><span>₦5,000</span></div>
+      <div class="summary-total">
+        <span>Total Due</span>
+        <div class="amount">₦150,000</div>
+      </div>
+    </div>
+
+    <div class="summary-card" style="margin-top:20px;">
+      <h4 style="font-size:17px;">🛡️ Secure Payment</h4>
+      <p style="font-size:13px;color:var(--gray-500);line-height:1.65;margin-bottom:14px;">Your payment is processed through our secure gateway. Your card information is encrypted and never stored.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <span class="badge badge-navy">🔒 SSL Secured</span>
+        <span class="badge badge-gold">PCI Compliant</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="portal-footer">
+  <p>© 2026 <strong>UMIS</strong> — University Management Information System</p>
+</footer>
+
+<script>
+  const API = 'http://localhost:3000/api';
+
+  function formatCard(input) {
+    let v = input.value.replace(/\D/g, '').substring(0,16);
+    v = v.replace(/(.{4})/g, '$1 ').trim();
+    input.value = v;
+    document.getElementById('previewNumber').textContent = v || '•••• •••• •••• ••••';
+  }
+  function formatExpiry(input) {
+    let v = input.value.replace(/\D/g,'');
+    if (v.length > 2) v = v.substring(0,2) + '/' + v.substring(2,4);
+    input.value = v;
+    document.getElementById('previewExpiry').textContent = v || 'MM/YY';
+  }
+  function selectTab(btn, type) {
+    document.querySelectorAll('.payment-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('cardPreview').style.display = type === 'card' ? 'block' : 'none';
+  }
+
+  document.getElementById('paymentForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(this));
+    const alertEl = document.getElementById('alert');
+    // Remove sensitive card data before sending
+    const payload = {
+      studentId: data.studentId,
+      paymentFor: data.paymentFor,
+      semester: data.semester,
+      amount: parseFloat(data.amount),
+      method: 'Card',
+      status: 'Paid'
+    };
+    document.getElementById('payBtnText').textContent = 'Processing...';
+    document.getElementById('spinner').style.display = 'block';
+    document.getElementById('payBtn').disabled = true;
+    try {
+      const res = await fetch(`${API}/payments`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const result = await res.json();
+      if (res.ok) {
+        const txnId = 'TXN-' + Math.random().toString(36).substr(2,8).toUpperCase();
+        document.getElementById('receiptId').textContent = result.payment?._id ? result.payment._id.toString().slice(-8).toUpperCase() : txnId;
+        document.getElementById('receiptBox').classList.add('show');
+        this.style.display = 'none';
+      } else {
+        alertEl.className = 'alert alert-danger show';
+        alertEl.textContent = '❌ ' + (result.message || 'Payment failed.');
+      }
+    } catch {
+      alertEl.className = 'alert alert-danger show';
+      alertEl.innerHTML = '⚠️ Cannot connect to backend. Ensure the server is running.';
+    } finally {
+      document.getElementById('payBtnText').textContent = '🔒 Pay Securely';
+      document.getElementById('spinner').style.display = 'none';
+      document.getElementById('payBtn').disabled = false;
+    }
+  });
+</script>
+</body>
+</html>

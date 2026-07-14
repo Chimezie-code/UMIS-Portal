@@ -3,7 +3,7 @@
 const UMIS_AUTH = (() => {
   const TOKEN_KEY = 'umis_token';
   const USER_KEY  = 'umis_user';
-  const API       = 'http://localhost:3000/api';
+  const API       = '/api';
 
   function saveSession(token, user) {
     localStorage.setItem(TOKEN_KEY, token);
